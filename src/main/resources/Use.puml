@@ -1,0 +1,17 @@
+@startuml
+
+(Use the VkApp) as (Use)
+
+User -> (Write message)
+User --> (Use)
+
+Use -> (VkBot)
+(VkBot) -> [Server]
+[Server] --> (TlgBot)
+(TlgBot) -> (TelegramApp)
+(TelegramApp) --> User2
+
+note "Some message" as N2
+(Write message) .. N2
+N2 .. (Use)
+@enduml
