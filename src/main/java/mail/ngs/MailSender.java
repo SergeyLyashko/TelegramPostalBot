@@ -3,6 +3,12 @@ package mail.ngs;
 /*
 public class MailSender implements MailProperties {
 
+    // Gmail
+    https://support.google.com/mail/answer/7104828?hl=ru
+
+    // Mail.ru
+    https://help.mail.ru/mail/mailer/popsmtp
+
     private static final String SMTP_SERVER = "smtp.ngs.ru";
     private static final String SMTP_PORT = "465";
     private NgsMailAuthenticator mailAuthenticator;

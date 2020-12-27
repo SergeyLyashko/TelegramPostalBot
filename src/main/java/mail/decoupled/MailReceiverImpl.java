@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
+import javax.mail.search.FlagTerm;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Получение сообщений
@@ -55,10 +57,22 @@ public class MailReceiverImpl implements MailReceiver {
         Store store = getStore();
         if (store != null){
             connect(store);
-            Message message = getMessage(store);
-            if(message != null) {
-                showContent(message);
+            Folder folder = getFolder(store);
+            if(folder != null) {
+                receiveNewMessage(folder);
             }
+        }
+    }
+
+    // получение только новых сообщений
+    private void receiveNewMessage(Folder folder) {
+        Flags seen = new Flags(Flags.Flag.SEEN);
+        FlagTerm flagUnseen = new FlagTerm(seen,  false);
+        try {
+            Message[] search = folder.search(flagUnseen);
+            Arrays.stream(search).forEach(this::showContent);
+        } catch (MessagingException e) {
+            e.printStackTrace();
         }
     }
 
@@ -94,12 +108,11 @@ public class MailReceiverImpl implements MailReceiver {
      * Folder - предоставляет возможность иерархически организовывать сообщения.
      * Папки могут содержать сообщения и поддиректории.
      */
-    private Message getMessage(Store store) {
+    private Folder getFolder(Store store) {
         try {
             Folder folder = store.getFolder(folderName);
-            folder.open(Folder.READ_ONLY);
-            int lastMessage = folder.getMessageCount();
-            return folder.getMessage(lastMessage);
+            folder.open(Folder.READ_WRITE);
+            return folder;
         } catch (MessagingException e) {
             e.printStackTrace();
         }
@@ -107,10 +120,12 @@ public class MailReceiverImpl implements MailReceiver {
     }
 
     private void showContent(Message message) {
+        System.out.println("test");
         try {
             Multipart content = (Multipart) message.getContent();
             BodyPart bodyPart = content.getBodyPart(0);
             System.out.println(bodyPart.getContent());
+            // варианты получения текстового сообщения или в виде MIME
             /*for(int index=0; index<content.getCount(); index++){
                 BodyPart bodyPart = content.getBodyPart(index);
                 if(bodyPart.getFileName() == null) {
