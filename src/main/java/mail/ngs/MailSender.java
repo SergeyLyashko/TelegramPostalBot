@@ -1,9 +1,7 @@
 package mail.ngs;
 
-import javax.mail.Session;
-import java.util.Properties;
-
-public class MailSender implements Propertiesable {
+/*
+public class MailSender implements MailProperties {
 
     private static final String SMTP_SERVER = "smtp.ngs.ru";
     private static final String SMTP_PORT = "465";
@@ -14,7 +12,7 @@ public class MailSender implements Propertiesable {
     }
 
     // Настройка SMTP SSL
-    public Properties getProperties(){
+    public Properties createNewProperties(){
         Properties properties = new Properties();
         properties.put("mail.smtp.host"               , SMTP_SERVER);
         properties.put("mail.smtp.port"               , SMTP_PORT);
@@ -24,3 +22,5 @@ public class MailSender implements Propertiesable {
         return properties;
     }
 }
+
+ */

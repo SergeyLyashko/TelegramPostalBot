@@ -1,4 +1,7 @@
-package mail.ngs;
+package mail.configuration;
+
+import mail.decoupled.MailAuthenticator;
+import org.springframework.stereotype.Component;
 
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
@@ -12,29 +15,29 @@ import javax.mail.PasswordAuthentication;
  * система будет вызывать метод подкласса (например, getPasswordAuthentication).
  * Этот метод подкласса может делать запросы аутентификации.
  */
-class NgsMailAuthenticator extends Authenticator {
+@Component("authenticator")
+public class NgsMailAuthenticator extends Authenticator implements MailAuthenticator {
 
     private static final String LOGIN = "u-ko@ngs.ru";
     private static final String PASS = "lKyiz8";
-    private final PostalData postalData;
 
-    NgsMailAuthenticator() {
-        postalData = new NgsPostalDataImpl();
-    }
-
+    @Override
     public PasswordAuthentication getPasswordAuthentication(){
         return new PasswordAuthentication(LOGIN, PASS);
     }
 
-    public String getLogin() {
+    @Override
+    public Authenticator getAuthenticator() {
+        return this;
+    }
+
+    @Override
+    public String getLogin(){
         return LOGIN;
     }
 
-    public String getPass() {
+    @Override
+    public String getPass(){
         return PASS;
-    }
-
-    public PostalData getPostalData(){
-        return postalData;
     }
 }
