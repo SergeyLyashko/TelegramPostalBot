@@ -12,7 +12,7 @@ public class NgsMailReceiveConfiguration {
     }
 
     public PostalSettings postalSettings(){
-        return new NgsImapPostalSettings();
+        return new NgsImapSettings();
     }
 
     public MailReceiver mailReceiver(){

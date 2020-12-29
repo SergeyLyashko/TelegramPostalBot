@@ -4,7 +4,7 @@ import mail.decoupled.PostalSettings;
 import org.springframework.stereotype.Component;
 
 @Component("imapsettings")
-public class NgsImapPostalSettings implements PostalSettings {
+public class NgsImapSettings implements PostalSettings {
 
     private static final String IMAP_SERVER = "mail.ngs.ru";
     private static final String IMAP_PORT = "143";

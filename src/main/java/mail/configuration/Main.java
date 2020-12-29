@@ -11,3 +11,8 @@ public class Main {
         receiver.receiveMail();
     }
 }
+/*
+http://java-online.ru/javax-mail.xhtml
+http://www.quizful.net/post/java-mail-api
+https://javaee.github.io/javamail/docs/api/
+ */
