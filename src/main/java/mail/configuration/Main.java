@@ -7,7 +7,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class Main {
     public static void main(String...args){
         ApplicationContext context = new AnnotationConfigApplicationContext(NgsMailReceiveConfiguration.class);
-        MailReceiver receiver = context.getBean("mailreceiver", MailReceiver.class);
+        MailReceiver receiver = context.getBean("mailReceiver", MailReceiver.class);
         receiver.receiveMail();
     }
 }

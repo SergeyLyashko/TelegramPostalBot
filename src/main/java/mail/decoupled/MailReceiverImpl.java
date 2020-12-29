@@ -11,7 +11,7 @@ import java.util.Arrays;
 /**
  * Получение сообщений
  */
-@Service("mailreceiver")
+@Service("mailReceiver")
 public class MailReceiverImpl implements MailReceiver {
 
     private String folderName = "INBOX";
@@ -120,7 +120,6 @@ public class MailReceiverImpl implements MailReceiver {
     }
 
     private void showContent(Message message) {
-        System.out.println("test");
         try {
             Multipart content = (Multipart) message.getContent();
             BodyPart bodyPart = content.getBodyPart(0);
