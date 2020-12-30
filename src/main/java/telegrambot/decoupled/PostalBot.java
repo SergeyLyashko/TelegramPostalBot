@@ -1,6 +1,8 @@
 package telegrambot.decoupled;
 
-public interface WebhookBot {
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+
+public interface PostalBot {
 
     void setPostalBotToken(BotToken botToken);
     BotToken getPostalBotToken();
@@ -8,9 +10,7 @@ public interface WebhookBot {
     void setBotUpdate(BotUpdate botUpdate);
     BotUpdate getBotUpdate();
 
-    void setRequestSettings(BotRequestSettings requestSettings);
-    BotRequestSettings getRequestSettings();
-
     void registerBot();
 
+    void sendMessage(SendMessage message);
 }

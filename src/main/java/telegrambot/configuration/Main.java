@@ -1,8 +1,9 @@
 package telegrambot.configuration;
 
-import org.springframework.context.ApplicationContext;
+import mail.configuration.NgsMailReceiveConfiguration;
+import mail.decoupled.MailReceiver;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import telegrambot.decoupled.WebhookBot;
+import telegrambot.decoupled.PostalBot;
 
 /**
  * https://habr.com/ru/post/528694/
@@ -10,19 +11,15 @@ import telegrambot.decoupled.WebhookBot;
 public class Main {
     public static void main(String...args){
 
-        /*try {
-            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-            // TODO убрать имя и токен
-            String botName = "msgVkontakteBot";
-            String botToken = "1328867240:AAERZyHSBoeT9gpbmYGypCO9LJ-8XnCLmzQ";
-            BotWebHookRequest botWebHookRequest = new BotWebHookRequest();
-            telegramBotsApi.registerBot(new PostalWebhookBot(botName, botToken), botWebHookRequest);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }*/
-
-        ApplicationContext context = new AnnotationConfigApplicationContext(BotWebhookConfiguration.class);
-        WebhookBot postalBot = context.getBean("postalwebhookbot", WebhookBot.class);
+        AnnotationConfigApplicationContext botContext = new AnnotationConfigApplicationContext(BotConfiguration.class);
+        PostalBot postalBot = botContext.getBean("postalBot", PostalBot.class);
         postalBot.registerBot();
+
+        AnnotationConfigApplicationContext mailContext = new AnnotationConfigApplicationContext(NgsMailReceiveConfiguration.class);
+        MailReceiver receiver = mailContext.getBean("mailReceiver", MailReceiver.class);
+
+        receiver.setBot(postalBot);
+        receiver.receiveMail();
+
     }
 }

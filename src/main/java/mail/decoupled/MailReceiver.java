@@ -1,5 +1,7 @@
 package mail.decoupled;
 
+import telegrambot.decoupled.PostalBot;
+
 public interface MailReceiver {
 
     void setMailSession(MailSession mailSession);
@@ -12,4 +14,7 @@ public interface MailReceiver {
     MailAuthenticator getMailAuthenticator();
 
     void receiveMail();
+
+    void setBot(PostalBot bot);
+    PostalBot getBot();
 }

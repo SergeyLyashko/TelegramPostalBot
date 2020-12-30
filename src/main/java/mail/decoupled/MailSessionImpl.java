@@ -7,7 +7,7 @@ import javax.mail.Session;
 
 /**
  * Session - класс, который определяет основные сессии почты.
- * Чтобы передать значения в объект сессии, могут быть использованы Properties.
+ * Чтобы передать значения в объект сессии использованы Properties.
  */
 @Service("session")
 public class MailSessionImpl implements MailSession {

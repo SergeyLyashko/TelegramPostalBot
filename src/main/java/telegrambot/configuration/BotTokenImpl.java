@@ -6,6 +6,7 @@ import telegrambot.decoupled.BotToken;
 @Component("bottoken")
 public class BotTokenImpl implements BotToken {
 
+    // https://habr.com/ru/post/528694/ TOKEN
     private static final String BOT_NAME = "PostalService_Bot";
     private static final String BOT_TOKEN = "1473280674:AAEtKNNzsRuAwbv4ZnDrqrq8vLBC27ZYQ0A";
 
