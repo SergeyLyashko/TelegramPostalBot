@@ -1,11 +1,9 @@
 package telegrambot;
 
-import org.telegram.telegrambots.bots.TelegramWebhookBot;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.IBotCommand;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.ICommandRegistry;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
 import java.util.Collection;
@@ -14,18 +12,7 @@ import java.util.function.BiConsumer;
 /*
  * https://github.com/rubenlagus/TelegramBots/blob/master/telegrambots-extensions/src/main/java/org/telegram/telegrambots/extensions/bots/commandbot/TelegramLongPollingCommandBot.java
  */
-public abstract class TelegramWebhookCommandBot extends TelegramWebhookBot implements ICommandRegistry {
-
-
-    @Override
-    public String getBotUsername() {
-        return null;
-    }
-
-    @Override
-    public String getBotToken() {
-        return null;
-    }
+public abstract class CommandBot extends TelegramLongPollingBot implements ICommandRegistry {
 
     @Override
     public void registerDefaultAction(BiConsumer<AbsSender, Message> biConsumer) {
@@ -59,16 +46,6 @@ public abstract class TelegramWebhookCommandBot extends TelegramWebhookBot imple
 
     @Override
     public IBotCommand getRegisteredCommand(String s) {
-        return null;
-    }
-
-    @Override
-    public BotApiMethod onWebhookUpdateReceived(Update update) {
-        return null;
-    }
-
-    @Override
-    public String getBotPath() {
         return null;
     }
 }

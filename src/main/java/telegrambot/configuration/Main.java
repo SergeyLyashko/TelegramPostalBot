@@ -20,6 +20,5 @@ public class Main {
 
         receiver.setBot(postalBot);
         receiver.receiveMail();
-
     }
 }
