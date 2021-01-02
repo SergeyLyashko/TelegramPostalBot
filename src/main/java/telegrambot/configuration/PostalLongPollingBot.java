@@ -1,7 +1,6 @@
 package telegrambot.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -26,12 +25,8 @@ import java.util.List;
 @Service("postalBot")
 public class PostalLongPollingBot extends TelegramLongPollingCommandBot implements PostalBot {
 
-    private BotToken botToken;
     private BotUpdate botUpdate;
-
-    public PostalLongPollingBot() {
-        //super.register(command.getBotCommand());
-    }
+    private BotToken botToken;
 
     @Override
     @Autowired
@@ -40,8 +35,7 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
     }
 
     @Override
-    @Autowired
-    public void setPostalBotToken(BotToken botToken){
+    public void setPostalBotToken(BotToken botToken) {
         this.botToken = botToken;
     }
 
@@ -49,11 +43,6 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
     @Autowired
     public void setBotUpdate(BotUpdate botUpdate){
         this.botUpdate = botUpdate;
-    }
-
-    @Override
-    public BotToken getPostalBotToken(){
-        return botToken;
     }
 
     @Override

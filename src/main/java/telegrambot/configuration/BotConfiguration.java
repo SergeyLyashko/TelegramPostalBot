@@ -9,11 +9,6 @@ import telegrambot.decoupled.*;
 public class BotConfiguration {
 
     @Bean
-    public BotToken botToken(){
-        return new BotTokenImpl();
-    }
-
-    @Bean
     public Command command(){
         return new StartCommand();
     }
@@ -22,7 +17,6 @@ public class BotConfiguration {
     public PostalBot postalBot(){
         PostalBot bot = new PostalLongPollingBot();
         bot.setCommand(command());
-        bot.setPostalBotToken(botToken());
         bot.setBotUpdate(botUpdate());
         return bot;
     }

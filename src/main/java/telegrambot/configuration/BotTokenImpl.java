@@ -1,20 +1,28 @@
 package telegrambot.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import telegrambot.decoupled.BotToken;
 
-@Component("bottoken")
+@Component("token")
 public class BotTokenImpl implements BotToken {
 
-    // https://habr.com/ru/post/528694/ TOKEN
-    private static final String BOT_NAME = "PostalService_Bot";
-    private static final String BOT_TOKEN = "1473280674:AAEtKNNzsRuAwbv4ZnDrqrq8vLBC27ZYQ0A";
+    private final String botName;
+    private final String botToken;
 
-    public String getBotName(){
-        return BOT_NAME;
+    @Autowired
+    public BotTokenImpl(String botName, String botToken){
+        this.botName = botName;
+        this.botToken = botToken;
     }
 
+    @Override
+    public String getBotName(){
+        return botName;
+    }
+
+    @Override
     public String getBotToken(){
-        return BOT_TOKEN;
+        return botToken;
     }
 }
