@@ -10,6 +10,8 @@ public interface PostalBot {
     void setBotUpdate(BotUpdate botUpdate);
     BotUpdate getBotUpdate();
 
+    void setCommand(Command command);
+
     void registerBot();
 
     void sendMessage(SendMessage message);

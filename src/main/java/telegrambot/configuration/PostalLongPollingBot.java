@@ -29,10 +29,14 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
     private BotToken botToken;
     private BotUpdate botUpdate;
 
-    @Autowired
-    public PostalLongPollingBot(@Value("startCommand") Command command) {
-        super.register(command.getBotCommand());
+    public PostalLongPollingBot() {
+        //super.register(command.getBotCommand());
+    }
 
+    @Override
+    @Autowired
+    public void setCommand(Command command){
+        super.register(command.getBotCommand());
     }
 
     @Override
@@ -87,23 +91,6 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
         // TODO
     }
 
-    /**
-     *  Метод для приема сообщений.
-     *  объект Update, сериализованный в JSON.
-     *  Этот объект представляет из себя входящее обновление.
-     *  Под обновлением подразумевается действие,
-     *  совершённое с ботом — например, получение сообщения от пользователя.
-     */
-    /*
-    @Override
-    public void onUpdateReceived(Update update) {
-        //SendMessage message = botUpdate.send(update);
-        //sendMessage(message);
-        setChatId(update);
-        System.out.println("Тест update bot"); // my chatID 528647782
-    }
-    */
-
     private void setChatId(Update update) {
         Message message = update.getMessage();
         Long chatId = message.getChatId();
@@ -144,18 +131,4 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;
     }
-
-    /*private void send(Update update) {
-        SendMessage newMessage = new SendMessage();
-        //Integer updateId = update.getUpdateId();
-        Message message = update.getMessage();
-        Long chatId = message.getChatId();
-        newMessage.setChatId(chatId.toString());
-        newMessage.setText("Привет, Человек!");// TEST
-        try {
-            super.execute(newMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }*/
 }
