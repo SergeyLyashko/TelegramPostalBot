@@ -2,9 +2,11 @@ package telegrambot.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import telegrambot.command.StartCommand;
 import telegrambot.decoupled.*;
 
+@ImportResource(locations = {"classpath:bot-token-context.xml"})
 @Configuration
 public class BotConfiguration {
 
@@ -15,10 +17,7 @@ public class BotConfiguration {
 
     @Bean
     public PostalBot postalBot(){
-        PostalBot bot = new PostalLongPollingBot();
-        bot.setCommand(command());
-        bot.setBotUpdate(botUpdate());
-        return bot;
+        return new PostalLongPollingBot();
     }
 
     @Bean

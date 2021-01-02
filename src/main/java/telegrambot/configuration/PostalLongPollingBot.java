@@ -35,6 +35,7 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
     }
 
     @Override
+    @Autowired
     public void setPostalBotToken(BotToken botToken) {
         this.botToken = botToken;
     }
