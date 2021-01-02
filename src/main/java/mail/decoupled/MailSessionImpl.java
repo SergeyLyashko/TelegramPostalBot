@@ -3,7 +3,9 @@ package mail.decoupled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.Authenticator;
 import javax.mail.Session;
+import java.util.Properties;
 
 /**
  * Session - класс, который определяет основные сессии почты.
@@ -39,7 +41,9 @@ public class MailSessionImpl implements MailSession {
 
     @Override
     public Session getSession(){
-        Session session = Session.getDefaultInstance(mailProperties.createNewProperties(), mailAuthenticator.getAuthenticator());
+        Properties newProperties = mailProperties.createNewProperties();
+        Authenticator authenticator = mailAuthenticator.getAuthenticator();
+        Session session = Session.getDefaultInstance(newProperties, authenticator);
         session.setDebug(false);
         return session;
     }

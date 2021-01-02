@@ -1,6 +1,7 @@
 package mail.configuration;
 
 import mail.decoupled.MailAuthenticator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.mail.Authenticator;
@@ -17,13 +18,18 @@ import javax.mail.PasswordAuthentication;
  */
 @Component("authenticator")
 public class NgsMailAuthenticator extends Authenticator implements MailAuthenticator {
+    private final String login;
+    private final String pass;
 
-    private static final String LOGIN = "u-ko@ngs.ru";
-    private static final String PASS = "lKyiz8";
+    @Autowired
+    public NgsMailAuthenticator(String login, String pass){
+        this.login = login;
+        this.pass = pass;
+    }
 
     @Override
     public PasswordAuthentication getPasswordAuthentication(){
-        return new PasswordAuthentication(LOGIN, PASS);
+        return new PasswordAuthentication(login, pass);
     }
 
     @Override
@@ -33,11 +39,11 @@ public class NgsMailAuthenticator extends Authenticator implements MailAuthentic
 
     @Override
     public String getLogin(){
-        return LOGIN;
+        return login;
     }
 
     @Override
     public String getPass(){
-        return PASS;
+        return pass;
     }
 }

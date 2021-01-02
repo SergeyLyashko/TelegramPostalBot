@@ -1,6 +1,6 @@
 package telegrambot.configuration;
 
-import mail.configuration.NgsMailReceiveConfiguration;
+import mail.configuration.NgsMailConfiguration;
 import mail.decoupled.MailReceiver;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -14,22 +14,20 @@ import telegrambot.decoupled.PostalBot;
 public class Main {
     public static void main(String...args){
 
-        GenericXmlApplicationContext tokenContext = new GenericXmlApplicationContext();
-        tokenContext.load("classpath:bot-token-context.xml");
-        tokenContext.refresh();
-        BotToken botToken = tokenContext.getBean("token", BotToken.class);
+        GenericXmlApplicationContext botTokenContext = new GenericXmlApplicationContext();
+        botTokenContext.load("classpath:bot-token-context.xml");
+        botTokenContext.refresh();
+        BotToken botToken = botTokenContext.getBean("token", BotToken.class);
 
         ApplicationContext botContext = new AnnotationConfigApplicationContext(BotConfiguration.class);
         PostalBot postalBot = botContext.getBean("postalBot", PostalBot.class);
         postalBot.setPostalBotToken(botToken);
         postalBot.registerBot();
-        tokenContext.close();
+        botTokenContext.close();
 
-        ApplicationContext mailContext = new AnnotationConfigApplicationContext(NgsMailReceiveConfiguration.class);
+        ApplicationContext mailContext = new AnnotationConfigApplicationContext(NgsMailConfiguration.class);
         MailReceiver receiver = mailContext.getBean("mailReceiver", MailReceiver.class);
-
         receiver.setBot(postalBot);
         receiver.receiveMail();
-
     }
 }

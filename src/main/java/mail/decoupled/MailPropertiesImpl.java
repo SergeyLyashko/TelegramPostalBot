@@ -9,7 +9,7 @@ import java.util.Properties;
  * Параметры подключения
  */
 @Service("receiveproperties")
-public class MailReceiveProperties implements MailProperties {
+public class MailPropertiesImpl implements MailProperties {
 
     private PostalSettings postalSettings;
 
