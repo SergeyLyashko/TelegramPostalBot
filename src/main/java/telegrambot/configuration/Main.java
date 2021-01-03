@@ -16,9 +16,11 @@ public class Main {
         PostalBot postalBot = botContext.getBean("postalBot", PostalBot.class);
         postalBot.registerBot();
 
+        /*
         ApplicationContext mailContext = new AnnotationConfigApplicationContext(NgsMailConfiguration.class);
         MailReceiver receiver = mailContext.getBean("mailReceiver", MailReceiver.class);
         receiver.setBot(postalBot);
         receiver.receiveMail();
+        */
     }
 }

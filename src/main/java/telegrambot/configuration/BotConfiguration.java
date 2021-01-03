@@ -19,9 +19,4 @@ public class BotConfiguration {
     public PostalBot postalBot(){
         return new PostalLongPollingBot();
     }
-
-    @Bean
-    public BotUpdate botUpdate(){
-        return new PostalBotUpdate();
-    }
 }

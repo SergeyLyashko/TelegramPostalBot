@@ -7,32 +7,23 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import telegrambot.command.ServiceButton;
+import telegrambot.command.ServiceKeyBoard;
 import telegrambot.decoupled.BotToken;
-import telegrambot.decoupled.BotUpdate;
 import telegrambot.decoupled.Command;
 import telegrambot.decoupled.PostalBot;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Бот
+ * задать описание бота
+ * https://ru.stackoverflow.com/questions/668818/%D0%9A%D0%B0%D0%BA-%D0%B7%D0%B0%D0%B4%D0%B0%D1%82%D1%8C-%D0%BE%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5-%D0%B1%D0%BE%D1%82%D0%B0-telegram
  */
 @Service("postalBot")
 public class PostalLongPollingBot extends TelegramLongPollingCommandBot implements PostalBot {
 
-    private BotUpdate botUpdate;
     private BotToken botToken;
-
-    @Override
-    @Autowired
-    public void setCommand(Command command){
-        super.register(command.getBotCommand());
-    }
 
     @Override
     @Autowired
@@ -42,13 +33,8 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
 
     @Override
     @Autowired
-    public void setBotUpdate(BotUpdate botUpdate){
-        this.botUpdate = botUpdate;
-    }
-
-    @Override
-    public BotUpdate getBotUpdate(){
-        return botUpdate;
+    public void setCommand(Command command) {
+        super.register(command.getBotCommand());
     }
 
     @Override
@@ -56,7 +42,6 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
         try {
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
             telegramBotsApi.registerBot(this);
-            startButton();
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -67,23 +52,21 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
         return botToken.getBotName();
     }
 
-    @Override
-    public String getBotToken() {
-        return botToken.getBotToken();
-    }
-
     /**
-     * Ответы на запросы (не команды)
+     * Ответы на запросы
      * @param update
      */
     @Override
     public void processNonCommandUpdate(Update update) {
-        // TODO
-    }
-
-    private void setChatId(Update update) {
         Message message = update.getMessage();
         Long chatId = message.getChatId();
+        System.out.println("test non command chat ID: "+chatId);
+        start(chatId);
+    }
+
+    @Override
+    public String getBotToken() {
+        return botToken.getBotToken();
     }
 
     @Override
@@ -95,30 +78,17 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
         }
     }
 
-    private void startButton(){
-        InlineKeyboardMarkup button = createButton();
-        SendMessage buttonMessage = new SendMessage();
-        buttonMessage.setChatId("528647782");
-        buttonMessage.setText("test");
-        buttonMessage.setReplyMarkup(button);
+    private void start(Long chatId){
+        // TODO test
+        ServiceKeyBoard startKeyBoard = new ServiceKeyBoard();
+        //startKeyBoard.addButton(new ServiceButton("enter email"));
+        //startKeyBoard.addNewRowButton();
+        startKeyBoard.addButton(new ServiceButton("enter password"));
+        SendMessage startMessage = startKeyBoard.sendKeyboard(chatId, "keyboard");
         try {
-            super.execute(buttonMessage);
+            super.execute(startMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-    }
-
-    private InlineKeyboardMarkup createButton() {
-        System.out.println("test button");
-        InlineKeyboardMarkup inlineKeyboardMarkup =new InlineKeyboardMarkup();
-        InlineKeyboardButton keyboardButton = new InlineKeyboardButton();
-        keyboardButton.setText("start");
-        keyboardButton.setCallbackData("Button pressed !");
-        List<InlineKeyboardButton> keyboard = new ArrayList<>();
-        keyboard.add(keyboardButton);
-        List<List<InlineKeyboardButton>> rowList= new ArrayList<>();
-        rowList.add(keyboard);
-        inlineKeyboardMarkup.setKeyboard(rowList);
-        return inlineKeyboardMarkup;
     }
 }
