@@ -1,6 +1,8 @@
 package telegrambot.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -9,8 +11,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import telegrambot.command.ServiceButton;
-import telegrambot.command.ServiceKeyBoard;
 import telegrambot.decoupled.BotToken;
 import telegrambot.decoupled.Command;
 import telegrambot.decoupled.PostalBot;
@@ -33,8 +33,16 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
 
     @Override
     @Autowired
-    public void setCommand(Command command) {
-        super.register(command.getBotCommand());
+    @Qualifier("startCommand")
+    public void setStartCommand(Command startCommand) {
+        super.register(startCommand.getBotCommand());
+    }
+
+    @Override
+    @Autowired
+    @Qualifier("helpCommand")
+    public void setHelpCommand(Command helpCommand){
+        super.register(helpCommand.getBotCommand());
     }
 
     @Override
@@ -77,7 +85,7 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
             e.printStackTrace();
         }
     }
-
+    // TODO TEST
     private void start(Long chatId){
         // TODO test
         ServiceKeyBoard startKeyBoard = new ServiceKeyBoard();

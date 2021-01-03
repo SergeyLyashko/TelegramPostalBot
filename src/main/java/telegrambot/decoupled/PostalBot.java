@@ -6,7 +6,8 @@ public interface PostalBot {
 
     void setPostalBotToken(BotToken botToken);
 
-    void setCommand(Command command);
+    void setStartCommand(Command command);
+    void setHelpCommand(Command command);
 
     void registerBot();
 

@@ -1,8 +1,7 @@
-package telegrambot.configuration;
+package telegrambot.decoupled;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import telegrambot.decoupled.BotToken;
 
 @Component("token")
 public class BotTokenImpl implements BotToken {

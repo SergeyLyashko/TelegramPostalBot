@@ -1,4 +1,4 @@
-package telegrambot.command;
+package telegrambot.configuration;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 

@@ -3,6 +3,7 @@ package telegrambot.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import telegrambot.command.HelpCommand;
 import telegrambot.command.StartCommand;
 import telegrambot.decoupled.*;
 
@@ -11,8 +12,13 @@ import telegrambot.decoupled.*;
 public class BotConfiguration {
 
     @Bean
-    public Command command(){
+    public Command startCommand(){
         return new StartCommand();
+    }
+
+    @Bean
+    public Command helpCommand(){
+        return new HelpCommand();
     }
 
     @Bean
