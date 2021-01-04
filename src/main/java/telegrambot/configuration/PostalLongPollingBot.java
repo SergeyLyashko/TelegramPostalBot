@@ -2,8 +2,7 @@ package telegrambot.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,7 +19,7 @@ import telegrambot.decoupled.PostalBot;
  * задать описание бота
  * https://ru.stackoverflow.com/questions/668818/%D0%9A%D0%B0%D0%BA-%D0%B7%D0%B0%D0%B4%D0%B0%D1%82%D1%8C-%D0%BE%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5-%D0%B1%D0%BE%D1%82%D0%B0-telegram
  */
-@Service("postalBot")
+@Component("postalBot")
 public class PostalLongPollingBot extends TelegramLongPollingCommandBot implements PostalBot {
 
     private BotToken botToken;
@@ -55,11 +54,6 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
         }
     }
 
-    @Override
-    public String getBotUsername() {
-        return botToken.getBotName();
-    }
-
     /**
      * Ответы на запросы
      * @param update
@@ -70,6 +64,11 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
         Long chatId = message.getChatId();
         System.out.println("test non command chat ID: "+chatId);
         start(chatId);
+    }
+
+    @Override
+    public String getBotUsername() {
+        return botToken.getBotName();
     }
 
     @Override

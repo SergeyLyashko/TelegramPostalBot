@@ -1,6 +1,5 @@
-package mail.configuration;
+package mail.decoupled;
 
-import mail.decoupled.PostalSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

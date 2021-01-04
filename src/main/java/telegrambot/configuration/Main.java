@@ -2,7 +2,6 @@ package telegrambot.configuration;
 
 import mail.configuration.NgsMailConfiguration;
 import mail.decoupled.MailReceiver;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import telegrambot.decoupled.PostalBot;
 
@@ -12,15 +11,13 @@ import telegrambot.decoupled.PostalBot;
 public class Main {
     public static void main(String...args){
 
-        ApplicationContext botContext = new AnnotationConfigApplicationContext(BotConfiguration.class);
-        PostalBot postalBot = botContext.getBean("postalBot", PostalBot.class);
-        postalBot.registerBot();
+        AnnotationConfigApplicationContext botContext = new AnnotationConfigApplicationContext(BotConfiguration.class);
+        AnnotationConfigApplicationContext mailContext = new AnnotationConfigApplicationContext(NgsMailConfiguration.class);
+        mailContext.setParent(botContext);
 
-        /*
-        ApplicationContext mailContext = new AnnotationConfigApplicationContext(NgsMailConfiguration.class);
+        PostalBot postalBot = botContext.getBean("postalBot", PostalBot.class);
         MailReceiver receiver = mailContext.getBean("mailReceiver", MailReceiver.class);
-        receiver.setBot(postalBot);
+        postalBot.registerBot();
         receiver.receiveMail();
-        */
     }
 }

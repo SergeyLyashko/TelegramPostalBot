@@ -8,7 +8,7 @@ import java.util.Properties;
 /**
  * Параметры подключения
  */
-@Service("receiveproperties")
+@Service("properties")
 public class MailPropertiesImpl implements MailProperties {
 
     private PostalSettings postalSettings;
@@ -17,11 +17,6 @@ public class MailPropertiesImpl implements MailProperties {
     @Autowired
     public void setPostalSettings(PostalSettings postalSettings){
         this.postalSettings = postalSettings;
-    }
-
-    @Override
-    public PostalSettings getPostalSettings(){
-        return postalSettings;
     }
 
     @Override

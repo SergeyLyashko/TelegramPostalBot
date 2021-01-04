@@ -24,19 +24,9 @@ public class MailSessionImpl implements MailSession {
     }
 
     @Override
-    public MailAuthenticator getMailAuthenticator(){
-        return mailAuthenticator;
-    }
-
-    @Override
     @Autowired
     public void setMailProperties(MailProperties mailProperties){
         this.mailProperties = mailProperties;
-    }
-
-    @Override
-    public MailProperties getMailProperties(){
-        return mailProperties;
     }
 
     @Override

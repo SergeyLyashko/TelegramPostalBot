@@ -1,6 +1,7 @@
 package mail.decoupled;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import telegrambot.decoupled.PostalBot;
@@ -24,13 +25,10 @@ public class MailReceiverImpl implements MailReceiver {
     private PostalBot bot;
 
     @Override
-    public void setBot(PostalBot bot){
+    @Autowired
+    @Lazy
+    public void setPostalBot(PostalBot bot){
         this.bot = bot;
-    }
-
-    @Override
-    public PostalBot getBot(){
-        return bot;
     }
 
     @Override
@@ -40,30 +38,15 @@ public class MailReceiverImpl implements MailReceiver {
     }
 
     @Override
-    public MailSession getMailSession(){
-        return mailSession;
-    }
-
-    @Override
     @Autowired
     public void setImapPostalSettings(PostalSettings postalSettings){
         this.postalSettings = postalSettings;
     }
 
     @Override
-    public PostalSettings getImapPostalSettings(){
-        return postalSettings;
-    }
-
-    @Override
     @Autowired
     public void setMailAuthenticator(MailAuthenticator mailAuthenticator){
         this.mailAuthenticator = mailAuthenticator;
-    }
-
-    @Override
-    public MailAuthenticator getMailAuthenticator(){
-        return mailAuthenticator;
     }
 
     /**
