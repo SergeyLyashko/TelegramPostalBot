@@ -11,6 +11,11 @@ import org.springframework.context.annotation.ImportResource;
 public class NgsMailConfiguration {
 
     @Bean
+    public MailParser mailParser(){
+        return new MailParserImpl();
+    }
+
+    @Bean
     public MailReceiver mailReceiver(){
         return new MailReceiverImpl();
     }

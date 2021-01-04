@@ -6,8 +6,17 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import telegrambot.decoupled.PostalBot;
 
-import javax.mail.*;
+import javax.mail.BodyPart;
+import javax.mail.Flags;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.NoSuchProviderException;
+import javax.mail.Session;
+import javax.mail.Store;
 import javax.mail.search.FlagTerm;
+
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -21,6 +30,7 @@ public class MailReceiverImpl implements MailReceiver {
     private MailSession mailSession;
     private PostalSettings postalSettings;
     private MailAuthenticator mailAuthenticator;
+    private MailParser mailParser;
 
     private PostalBot bot;
 
@@ -47,6 +57,12 @@ public class MailReceiverImpl implements MailReceiver {
     @Autowired
     public void setMailAuthenticator(MailAuthenticator mailAuthenticator){
         this.mailAuthenticator = mailAuthenticator;
+    }
+
+    @Override
+    @Autowired
+    public void setMailParser(MailParser mailParser){
+        this.mailParser = mailParser;
     }
 
     /**
@@ -111,10 +127,15 @@ public class MailReceiverImpl implements MailReceiver {
         FlagTerm flagUnseen = new FlagTerm(seen,  false);
         try {
             Message[] messages = folder.search(flagUnseen);
-            Arrays.stream(messages).forEach(this::showContent);
+            Arrays.stream(messages).forEach(this::mailParser);
+            //Arrays.stream(messages).forEach(this::showContent);//TODO TEST
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    private void mailParser(Message message){
+        mailParser.setMessage(message);
     }
 
     // TODO переписать метод как метод отправки сообщения ботом в чат
@@ -128,13 +149,6 @@ public class MailReceiverImpl implements MailReceiver {
             sendMessage.setChatId("528647782");
             sendMessage.setText("Для чего я создан ?");
             bot.sendMessage(sendMessage);
-            // TODO варианты получения текстового сообщения или в виде MIME
-            /*for(int index=0; index<content.getCount(); index++){
-                BodyPart bodyPart = content.getBodyPart(index);
-                if(bodyPart.getFileName() == null) {
-                    System.out.println("index: " + index + " test message: " + bodyPart.getContent());
-                }
-            }*/
         } catch (IOException | MessagingException e) {
             e.printStackTrace();
         }

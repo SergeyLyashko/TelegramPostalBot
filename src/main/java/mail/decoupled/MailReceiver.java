@@ -10,6 +10,8 @@ public interface MailReceiver {
 
     void setMailAuthenticator(MailAuthenticator mailAuthenticator);
 
+    void setMailParser(MailParser mailParser);
+
     void setPostalBot(PostalBot bot);
 
     void receiveMail();

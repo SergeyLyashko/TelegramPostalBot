@@ -15,7 +15,6 @@ public class Main {
         ApplicationContext context = new AnnotationConfigApplicationContext(NgsMailConfiguration.class);
         MailReceiver receiver = context.getBean("mailReceiver", MailReceiver.class);
         receiver.receiveMail();
-
     }
 }
 
