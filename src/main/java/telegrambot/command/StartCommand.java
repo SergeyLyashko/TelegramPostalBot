@@ -47,6 +47,7 @@ public class StartCommand extends BotCommand implements Command {
         return this;
     }
 
+    @Override
     public Long getChatId(){
         return chatId;
     }

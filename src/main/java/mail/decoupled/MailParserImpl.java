@@ -1,29 +1,34 @@
 package mail.decoupled;
 
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
+import org.springframework.stereotype.Component;
+
+import javax.mail.*;
+import javax.mail.internet.MimeUtility;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Component("parser")
 public class MailParserImpl implements MailParser {
 
     private static final String TEXT = "text/plain; charset=utf-8";
-    private static final String WITHOUT_RETURN_CARET = "([^\\n]+[\\n].?)";
+    private static final String WITHOUT_RETURN_CARET_REGEX = "([^\\n]+[\\n].?)";
+    private static final String ADDRESS_SPLIT_REGEX = "([\\S\\s]+).([<][\\S]+[>])";
 
     private Message message;
 
     @Override
-    public void setMessage(Message message) {
+    public void parseMessage(Message message) {
         this.message = message;
-        // TODO test
-        String s = parseText();
-        System.out.println(s);
+        // TODO test show
+        //String s = parseMailText();
+        //System.out.println(s);
+        //getFrom();
     }
 
-    public String parseText(){
+    @Override
+    public String getMailText(){
         try {
             Multipart content = (Multipart) message.getContent();
             String stringContent = defineStringContent(content);
@@ -32,6 +37,49 @@ public class MailParserImpl implements MailParser {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public String[] getFrom(){
+        try {
+            Address[] from = message.getFrom();
+            String decodeAddress = decodeAddress(from);
+            return addressParser(decodeAddress);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String decodeAddress(Address[] addresses){
+        for(Address address: addresses){
+            if(address != null){
+                System.out.println("addr: "+address.toString());// TODO TEST
+                try {
+                    String decodeText = MimeUtility.decodeText(address.toString());
+                    System.out.println("test decode: "+decodeText);// TODO TEST
+                    return decodeText;
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+    private String[] addressParser(String decodeAddress) {
+        Pattern compile = Pattern.compile(ADDRESS_SPLIT_REGEX);
+        Matcher matcher = compile.matcher(decodeAddress);
+        String[] from = new String[2];
+        while (matcher.find()) {
+            String name = matcher.group(1);
+            from[0] = name;
+            String address = matcher.group(2);
+            from[1] = address;
+            System.out.println("test name: " + name);// TODO TEST
+            System.out.println("test addr: " + address);// TODO TEST
+        }
+        return from;
     }
 
     private String defineStringContent(Multipart content) throws MessagingException, IOException {
@@ -48,14 +96,14 @@ public class MailParserImpl implements MailParser {
     }
 
     private String textParser(String content) {
-        Pattern compile = Pattern.compile(WITHOUT_RETURN_CARET);
+        Pattern compile = Pattern.compile(WITHOUT_RETURN_CARET_REGEX);
         Matcher matcher = compile.matcher(content);
         StringBuilder text = new StringBuilder();
         while (matcher.find()){
             text.append(matcher.group(1));
         }
         return text.toString();
-        //return content; // TODO TEST
+        //return content; // TODO TEST full text
     }
 }
 /*

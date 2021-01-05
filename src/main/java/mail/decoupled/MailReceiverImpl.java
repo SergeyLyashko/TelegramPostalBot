@@ -3,19 +3,15 @@ package mail.decoupled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import telegrambot.decoupled.PostalBot;
 
-import javax.mail.BodyPart;
 import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.Store;
 import javax.mail.search.FlagTerm;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -84,29 +80,14 @@ public class MailReceiverImpl implements MailReceiver {
         try {
             Message[] messages = folder.search(flagUnseen);
             Arrays.stream(messages).forEach(this::mailParser);
-            //Arrays.stream(messages).forEach(this::showContent);//TODO TEST
         } catch (MessagingException e) {
             e.printStackTrace();
         }
     }
 
     private void mailParser(Message message){
-        mailParser.setMessage(message);
-    }
-///////////////////////////////////////////////////////////////////////////////////////////////
-    // TODO DEL
-    private void showContent(Message message) {
-        try {
-            Multipart content = (Multipart) message.getContent();
-            BodyPart bodyPart = content.getBodyPart(0);
-            System.out.println(bodyPart.getContent());
-            // TODO передача сообщения боту
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId("528647782");
-            sendMessage.setText("Для чего я создан ?");
-            postalBot.sendMessage(sendMessage);
-        } catch (IOException | MessagingException e) {
-            e.printStackTrace();
-        }
+        mailParser.parseMessage(message);
+        String[] from = mailParser.getFrom();
+        postalBot.deliverMail(from);
     }
 }

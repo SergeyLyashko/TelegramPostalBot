@@ -23,6 +23,8 @@ import telegrambot.decoupled.PostalBot;
 public class PostalLongPollingBot extends TelegramLongPollingCommandBot implements PostalBot {
 
     private BotToken botToken;
+    private Command startCommand;
+    private Command helpCommand;
 
     @Override
     @Autowired
@@ -34,14 +36,14 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
     @Autowired
     @Qualifier("startCommand")
     public void setStartCommand(Command startCommand) {
-        super.register(startCommand.getBotCommand());
+        this.startCommand = startCommand;
     }
 
     @Override
     @Autowired
     @Qualifier("helpCommand")
     public void setHelpCommand(Command helpCommand){
-        super.register(helpCommand.getBotCommand());
+        this.helpCommand = helpCommand;
     }
 
     @Override
@@ -49,13 +51,38 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
         try {
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
             telegramBotsApi.registerBot(this);
+            registerCommand();
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void registerCommand() {
+        super.register(startCommand.getBotCommand());
+        super.register(helpCommand.getBotCommand());
+    }
+
+    @Override
+    public void deliverMail(String[] from) {
+        //String mailText = mailParser.getMailText();
+        //String[] from = mailParser.getFrom();
+        createButton(from[0]);
+    }
+
+    private void createButton(String buttonText){
+        Long chatId = 528647782L;//startCommand.getChatId();
+        ServiceKeyBoard keyBoard = new ServiceKeyBoard();
+        keyBoard.addButton(new ServiceButton("@ from: "+buttonText));
+        SendMessage startMessage = keyBoard.sendKeyboard(chatId, "new mail:");
+        try {
+            super.execute(startMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Ответы на запросы
+     * Ответы на текстовые запросы
      * @param update
      */
     @Override
@@ -63,7 +90,6 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
         Message message = update.getMessage();
         Long chatId = message.getChatId();
         System.out.println("test non command chat ID: "+chatId);
-        start(chatId);
     }
 
     @Override
@@ -74,28 +100,5 @@ public class PostalLongPollingBot extends TelegramLongPollingCommandBot implemen
     @Override
     public String getBotToken() {
         return botToken.getBotToken();
-    }
-
-    @Override
-    public void sendMessage(SendMessage message){
-        try {
-            super.execute(message);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-    // TODO TEST
-    private void start(Long chatId){
-        // TODO test
-        ServiceKeyBoard startKeyBoard = new ServiceKeyBoard();
-        //startKeyBoard.addButton(new ServiceButton("enter email"));
-        //startKeyBoard.addNewRowButton();
-        startKeyBoard.addButton(new ServiceButton("enter password"));
-        SendMessage startMessage = startKeyBoard.sendKeyboard(chatId, "keyboard");
-        try {
-            super.execute(startMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
     }
 }
