@@ -21,8 +21,8 @@ public class NgsMailConfiguration {
     }
 
     @Bean
-    public MailSession mailSession(){
-        return new MailSessionImpl();
+    public MailConnection connection(){
+        return new MailStoreConnection();
     }
 
     @Bean

@@ -19,8 +19,8 @@ public class MailParserImpl implements MailParser {
     public void setMessage(Message message) {
         this.message = message;
         // TODO test
-        //String s = parseText();
-        //System.out.println(s);
+        String s = parseText();
+        System.out.println(s);
     }
 
     public String parseText(){

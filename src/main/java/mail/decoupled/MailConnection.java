@@ -1,12 +1,14 @@
 package mail.decoupled;
 
-import javax.mail.Session;
+import javax.mail.Store;
 
-public interface MailSession {
+public interface MailConnection {
 
     void setMailAuthenticator(MailAuthenticator mailAuthenticator);
 
     void setMailProperties(MailProperties mailProperties);
 
-    Session getSession();
+    void setImapPostalSettings(PostalSettings postalSettings);
+
+    Store storeConnection();
 }
