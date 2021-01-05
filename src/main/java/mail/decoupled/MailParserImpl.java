@@ -11,15 +11,16 @@ import java.util.regex.Pattern;
 public class MailParserImpl implements MailParser {
 
     private static final String TEXT = "text/plain; charset=utf-8";
-    private static final String NO_RETURN_CARET = "([^\\n]+[\\n].?)";
+    private static final String WITHOUT_RETURN_CARET = "([^\\n]+[\\n].?)";
+
     private Message message;
 
     @Override
     public void setMessage(Message message) {
         this.message = message;
         // TODO test
-        String s = parseText();
-        System.out.println(s);
+        //String s = parseText();
+        //System.out.println(s);
     }
 
     public String parseText(){
@@ -47,17 +48,30 @@ public class MailParserImpl implements MailParser {
     }
 
     private String textParser(String content) {
-        Pattern compile = Pattern.compile(NO_RETURN_CARET);
+        Pattern compile = Pattern.compile(WITHOUT_RETURN_CARET);
         Matcher matcher = compile.matcher(content);
-        String text = "";
+        StringBuilder text = new StringBuilder();
         while (matcher.find()){
-            text += matcher.group();
+            text.append(matcher.group(1));
         }
-        return text;
-        //return content;
+        return text.toString();
+        //return content; // TODO TEST
     }
 }
 /*
+([^\n]+[\n])((От:|От кого:|From:)([^\n]+[\n]))?((Кому:|To:)([^\n]+[\n]))?((Дата:|Date:)([^\n]+[\n]))?((Тема:|Theme:)([^\n]+[\n]))?
+
+private static final String GROUP_SPLIT =
+            // Группа 1: [текст письма (без лишних переносов строк)]
+            "([^\\n]+[\\n])" +
+            // Группа 2: [from: <Имя отправителя> <адрес>]
+            // Группа 3: [from:]
+            // Группа 4: []
+            "((От:|От кого:|From:)([^\\n]+[\\n]))?" +
+            "((Кому:|To:)([^\\n]+[\\n]))?" +
+            "((Дата:|Date:)([^\\n]+[\\n]))?" +
+            "((Тема:|Theme:)([^\\n]+[\\n]))?";
+
 Pattern.compile(
         // Группы 1-2 (-get: clients_list)
         "^[\\-{1}](?!send)(?!scanIP)([a-z]+)\\s([a-z]+)|"

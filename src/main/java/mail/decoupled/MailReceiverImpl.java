@@ -138,7 +138,7 @@ public class MailReceiverImpl implements MailReceiver {
         mailParser.setMessage(message);
     }
 
-    // TODO переписать метод как метод отправки сообщения ботом в чат
+    // TODO DEL
     private void showContent(Message message) {
         try {
             Multipart content = (Multipart) message.getContent();
