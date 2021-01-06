@@ -15,7 +15,6 @@ public class HelpCommand extends BotCommand implements Command {
     private static final String IDENTIFIER = "help";
     private static final String DESCRIPTION = "помощь";
     private static final String HELP_TEXT = "HELP!";
-    private Long chatId;
 
     public HelpCommand() {
         super(IDENTIFIER, DESCRIPTION);
@@ -23,7 +22,7 @@ public class HelpCommand extends BotCommand implements Command {
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
-        this.chatId = chat.getId();
+        Long chatId = chat.getId();
         try {
             absSender.execute(helpMessage(chatId));
         } catch (TelegramApiException e) {
@@ -41,10 +40,5 @@ public class HelpCommand extends BotCommand implements Command {
     @Override
     public BotCommand getBotCommand() {
         return this;
-    }
-
-    @Override
-    public Long getChatId() {
-        return chatId;
     }
 }

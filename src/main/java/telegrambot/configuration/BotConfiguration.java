@@ -12,6 +12,11 @@ import telegrambot.decoupled.*;
 public class BotConfiguration {
 
     @Bean
+    public KeyBoard keyBoard(){
+        return new ServiceKeyBoard();
+    }
+
+    @Bean
     public Command startCommand(){
         return new StartCommand();
     }

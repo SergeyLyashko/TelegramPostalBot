@@ -18,24 +18,22 @@ public class StartCommand extends BotCommand implements Command {
     private static final String HELLO_TEXT = "Привет, ";
     private static final String BOT_TEXT = "!\nЯ почтовый бот, который доставляет сообщения с вашей электронной почты.";
 
-    private Long chatId;
-
     public StartCommand(){
         super(IDENTIFIER, DESCRIPTION);
     }
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments){
-        this.chatId = chat.getId();
+        Long chatId = chat.getId();
         System.out.println("test ID: "+chatId); // TODO test
         try {
-            absSender.execute(helloMessage(user));
+            absSender.execute(sendHelloMessage(user, chatId));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }
 
-    private SendMessage helloMessage(User user) {
+    private SendMessage sendHelloMessage(User user, Long chatId) {
         SendMessage hello = new SendMessage();
         hello.setChatId(chatId.toString());
         hello.setText(HELLO_TEXT+user.getFirstName()+BOT_TEXT);
@@ -45,10 +43,5 @@ public class StartCommand extends BotCommand implements Command {
     @Override
     public BotCommand getBotCommand(){
         return this;
-    }
-
-    @Override
-    public Long getChatId(){
-        return chatId;
     }
 }
