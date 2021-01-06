@@ -88,6 +88,7 @@ public class MailReceiverImpl implements MailReceiver {
     private void mailParser(Message message){
         mailParser.parseMessage(message);
         String[] from = mailParser.getFrom();
-        postalBot.deliverMail(from);
+        String mailText = mailParser.getMailText();
+        postalBot.deliverMail(from, mailText);
     }
 }

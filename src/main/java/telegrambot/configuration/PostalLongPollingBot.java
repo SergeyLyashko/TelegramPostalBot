@@ -4,15 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.inlinequery.ChosenInlineQuery;
-import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import telegrambot.decoupled.BotToken;
@@ -28,11 +25,12 @@ import telegrambot.decoupled.PostalBot;
 public class PostalLongPollingBot extends TelegramLongPollingBot implements PostalBot {
 
     private BotToken botToken;
-    private Command startCommand;
-    private Command helpCommand;
-    private KeyBoard keyBoard;
+    private Command startCommand; // TODO ???
+    private Command helpCommand; // TODO ???
+    //private KeyBoard keyBoard;
     private Long chatId = 528647782L; // TODO TEST
-    private Integer messageId;
+
+    private Mailing mailing;
 
     @Override
     @Autowired
@@ -56,9 +54,15 @@ public class PostalLongPollingBot extends TelegramLongPollingBot implements Post
 
     @Override
     @Autowired
+    public void setMailing(Mailing mailing){
+        this.mailing = mailing;
+    }
+    /*
+    @Override
+    @Autowired
     public void setKeyBoard(KeyBoard keyBoard){
         this.keyBoard = keyBoard;
-    }
+    }*/
 
     @Override
     public void registerBot() {
@@ -77,30 +81,29 @@ public class PostalLongPollingBot extends TelegramLongPollingBot implements Post
     }
 
     @Override
-    public void deliverMail(String[] from) {
-        //String mailText = mailParser.getMailText();
-        //String[] from = mailParser.getFrom();
-        createButton(from[0]);
+    public void deliverMail(String[] from, String text) {
+        //createButton("@ from: " +from[0]);
+        mailing.createNewMail(from, text);
+        mailing.sendMailHeader();
     }
 
+    /*
     private void createButton(String buttonText){
-        ChatButton chatButton = new ChatServiceButton("@ from: " + buttonText);
+        ChatButton chatButton = new ChatServiceButton(buttonText);
         keyBoard.addButton(chatButton);
         keyBoard.sendNewKeyboard("new mail:");
-    }
+    }*/
 
     @Override
     public void sendMessage(SendMessage message){
         try {
-            Message execute = super.execute(message);
-            this.messageId = execute.getMessageId();
-            System.out.println("test execute id: "+messageId);
+            super.execute(message);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }
 
-    private void deleteMessage(){
+    private void deleteMessage(Integer messageId){
         DeleteMessage deleteMessage = new DeleteMessage(chatId.toString(), messageId);
         try {
             super.execute(deleteMessage);
@@ -118,7 +121,8 @@ public class PostalLongPollingBot extends TelegramLongPollingBot implements Post
             Integer messageId = message.getMessageId();
             String data = callbackQuery.getData();
             System.out.println("test callback: "+data+" msg id: "+messageId);
-            deleteMessage();
+            deleteMessage(messageId);
+            mailing.sendMailBody();
         }
     }
 

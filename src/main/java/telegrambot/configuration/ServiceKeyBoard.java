@@ -14,10 +14,9 @@ import java.util.List;
 public class ServiceKeyBoard implements KeyBoard {
 
     private final InlineKeyboardMarkup inlineKeyboard;
-    private Long chatId = 528647782L; // TODO TEST
     private List<InlineKeyboardButton> keyboardList;
     private final List<List<InlineKeyboardButton>> row;
-    private PostalBot postalBot;
+    //private PostalBot postalBot;
 
     public ServiceKeyBoard(){
         inlineKeyboard = new InlineKeyboardMarkup();
@@ -26,13 +25,13 @@ public class ServiceKeyBoard implements KeyBoard {
         row.add(keyboardList);
         inlineKeyboard.setKeyboard(row);
     }
-
+    /*
     @Override
     @Autowired
     public void setPostalBot(PostalBot postalBot){
         this.postalBot = postalBot;
-    }
-
+    }*/
+    /*
     @Override
     public void sendNewKeyboard(String text){
         SendMessage keyboardMessage = new SendMessage();
@@ -40,12 +39,17 @@ public class ServiceKeyBoard implements KeyBoard {
         keyboardMessage.setText(text);
         keyboardMessage.setReplyMarkup(inlineKeyboard);
         postalBot.sendMessage(keyboardMessage);
+    }*/
 
-    }
-
+    @Override
     public void addNewRowButton(){
         keyboardList = new ArrayList<>();
         row.add(keyboardList);
+    }
+
+    @Override
+    public InlineKeyboardMarkup getInlineKeyboardMarkup() {
+        return inlineKeyboard;
     }
 
     @Override

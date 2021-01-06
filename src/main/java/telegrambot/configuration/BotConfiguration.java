@@ -12,9 +12,14 @@ import telegrambot.decoupled.*;
 public class BotConfiguration {
 
     @Bean
+    public Mailing mailing(){
+        return new MailingImpl();
+    }
+    /*
+    @Bean
     public KeyBoard keyBoard(){
         return new ServiceKeyBoard();
-    }
+    }*/
 
     @Bean
     public Command startCommand(){
