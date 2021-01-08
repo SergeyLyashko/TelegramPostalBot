@@ -1,8 +1,10 @@
 package telegrambot.decoupled;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import telegrambot.configuration.KeyBoard;
-import telegrambot.configuration.Mailing;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import telegrambot.configuration.MailingService;
 
 public interface PostalBot {
 
@@ -10,12 +12,15 @@ public interface PostalBot {
     void setStartCommand(Command command);
     void setHelpCommand(Command command);
 
-    //void setKeyBoard(KeyBoard keyBoard);
-    void setMailing(Mailing mailing);
+    void setMailing(MailingService mailingService);
 
     void registerBot();
 
     void deliverMail(String[] from, String text);
 
-    void sendMessage(SendMessage message);
+    Message sendMessage(SendMessage message);
+
+    void deleteMessage(DeleteMessage message);
+
+    void sendMessage(EditMessageText headerMessage);
 }

@@ -8,10 +8,16 @@ public class ChatServiceButton implements ChatButton {
 
     private final InlineKeyboardButton inlineKeyboardButton;
 
-    public ChatServiceButton(String text){
+    public ChatServiceButton(){
         inlineKeyboardButton = new InlineKeyboardButton();
-        inlineKeyboardButton.setText(text);
-        inlineKeyboardButton.setCallbackData("button pressed");
+    }
+
+    public void setButtonName(String buttonName){
+        inlineKeyboardButton.setText(buttonName);
+    }
+
+    public void setCallbackData(String data){
+        inlineKeyboardButton.setCallbackData(data);
     }
 
     @Override
