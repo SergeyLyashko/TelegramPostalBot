@@ -2,6 +2,7 @@ package telegrambot.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -15,7 +16,8 @@ import java.util.Map;
 public class BotMailingService implements MailingService {
 
     private PostalBot postalBot;
-    private final Map<Integer, Letter> mailBox;
+    private final Map<Integer, LetterImpl> mailBox;
+    private Long chatId = 528647782L; // TODO TEST
 
     @Override
     @Autowired
@@ -29,8 +31,10 @@ public class BotMailingService implements MailingService {
 
     @Override
     public void createMail(String[] from, String text) {
-        Letter letter = new Letter(from, text);
-        Message headerMessage = postalBot.sendMessage(letter.getHeaderMessage());
+        LetterImpl letter = new LetterImpl(from, text);
+        SendMessage sendHeader = letter.getHeaderMessage();
+        sendHeader.setChatId(chatId.toString());
+        Message headerMessage = postalBot.sendMessage(sendHeader);
         Integer letterId = headerMessage.getMessageId();
         mailBox.put(letterId, letter);
     }
@@ -55,22 +59,25 @@ public class BotMailingService implements MailingService {
     }
 
     private void turnOffBodyMessage(Integer messageId) {
-        Letter letter = mailBox.get(messageId);
+        LetterImpl letter = mailBox.get(messageId);
         EditMessageText turnOffMessage = letter.getTurnOffMessage();
+        turnOffMessage.setChatId(chatId.toString());
         turnOffMessage.setMessageId(messageId);
         postalBot.sendMessage(turnOffMessage);
     }
 
     private void deleteMessage(Integer messageId) {
-        Letter letter = mailBox.get(messageId);
-        DeleteMessage deleteMessage = letter.getDeleteMessage();
+        DeleteMessage deleteMessage = new DeleteMessage();
+        deleteMessage.setChatId(chatId.toString());
         deleteMessage.setMessageId(messageId);
         postalBot.deleteMessage(deleteMessage);
+        mailBox.remove(messageId);
     }
 
     private void callbackBodyMessage(Integer messageId){
-        Letter letter = mailBox.get(messageId);
+        LetterImpl letter = mailBox.get(messageId);
         EditMessageText bodyMessage = letter.getBodyMessage();
+        bodyMessage.setChatId(chatId.toString());
         bodyMessage.setMessageId(messageId);
         postalBot.sendMessage(bodyMessage);
     }
