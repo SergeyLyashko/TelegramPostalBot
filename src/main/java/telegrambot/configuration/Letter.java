@@ -4,14 +4,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 
-public class ChatLetter {
+public class Letter {
 
     private static final String HEADER_NEW_MAIL = "@ NEW:";
     private static final String HEADER_READ_MAIL = "@ read:";
     private static final String HEADER_BUTTON_PREFIX = "@ from: ";
-    private final ChatServiceButton deleteButton;
-    private final ChatServiceButton turnOfButton;
-    private final ChatServiceButton messageButton;
     private final String address;
     private final String name;
     private Long chatId = 528647782L; // TODO TEST
@@ -23,7 +20,7 @@ public class ChatLetter {
     private StringBuilder bodyBuilder;
     private String splitLine;
 
-    public ChatLetter(String[] from, String text) {
+    public Letter(String[] from, String text) {
         if(from.length < 2){
             this.name = "none";
             this.address = from[0];
@@ -32,19 +29,10 @@ public class ChatLetter {
             this.address = from[1];
         }
         createHeaderTextToBody();
-        deleteButton = new ChatServiceButton();
-        deleteButton.setButtonName("delete");
-        deleteButton.setCallbackData("delete");
-        turnOfButton = new ChatServiceButton();
-        turnOfButton.setButtonName("turn off");
-        turnOfButton.setCallbackData("turn off");
-        messageButton = new ChatServiceButton();
-        messageButton.setButtonName(HEADER_BUTTON_PREFIX+name);
-        messageButton.setCallbackData("header");
-        createHeader();
+        createHeader(HEADER_BUTTON_PREFIX+name);
         createBody(text);
         deleteLetter();
-        turnOff();
+        turnOff(HEADER_BUTTON_PREFIX+name);
     }
 
     private void createHeaderTextToBody(){
@@ -62,7 +50,7 @@ public class ChatLetter {
     private void createSplitLine(){
         int lineLength = Math.max(name.length(), address.length());
         StringBuilder splitLine = new StringBuilder();
-        for(int i=0; i<=lineLength; i++){
+        while (lineLength-->0){
             splitLine.append("=");
         }
         splitLine.append("\n");
@@ -75,9 +63,8 @@ public class ChatLetter {
         this.deleteMessage = deleteMessage;
     }
 
-    private void createHeader(){
-        KeyBoard headerKeyboard = new ServiceKeyBoard();
-        headerKeyboard.addButton(messageButton);
+    private void createHeader(String headerText){
+        KeyBoard headerKeyboard = new LetterKeyBoard(headerText);
         this.headerMessage = createSendMessage(headerKeyboard);
     }
 
@@ -90,9 +77,7 @@ public class ChatLetter {
     }
 
     private void createBody(String text) {
-        KeyBoard keyBoard = new ServiceKeyBoard();
-        keyBoard.addButton(deleteButton);
-        keyBoard.addButton(turnOfButton);
+        KeyBoard keyBoard = new LetterKeyBoard("delete", "turn off");
         String textBody = bodyBuilder.append(text).toString();
         this.bodyMessage = createEditMessage(textBody, keyBoard);
     }
@@ -105,9 +90,8 @@ public class ChatLetter {
         return editMessage;
     }
 
-    private void turnOff() {
-        KeyBoard turnOfKeyboard = new ServiceKeyBoard();
-        turnOfKeyboard.addButton(messageButton);
+    private void turnOff(String headerText) {
+        KeyBoard turnOfKeyboard = new LetterKeyBoard(headerText);
         this.turnOffMessage = createEditMessage(HEADER_READ_MAIL, turnOfKeyboard);
     }
 

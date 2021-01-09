@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class MailParserImpl implements MailParser {
 
     private static final String TEXT = "text/plain; charset=utf-8";
-    private static final String WITHOUT_RETURN_CARET_REGEX = "([^\\n]+[\\n].?)";
+    private static final String WITHOUT_RETURN_CARET_REGEX = "([^\\n]+[\\n]{1,2}.*)"; /*([^\\n]+[\\n].*)";*/
     private static final String ADDRESS_SPLIT_REGEX = "([\\S\\s]+).([<][\\S]+[>])";
 
     private Message message;
@@ -21,10 +21,6 @@ public class MailParserImpl implements MailParser {
     @Override
     public void parseMessage(Message message) {
         this.message = message;
-        // TODO test show
-        //String s = parseMailText();
-        //System.out.println(s);
-        //getFrom();
     }
 
     @Override
@@ -102,33 +98,7 @@ public class MailParserImpl implements MailParser {
         while (matcher.find()){
             text.append(matcher.group(1));
         }
+        System.out.println(text.toString()); // TODO TEST
         return text.toString();
-        //return content; // TODO TEST full text
     }
 }
-/*
-([^\n]+[\n])((От:|От кого:|From:)([^\n]+[\n]))?((Кому:|To:)([^\n]+[\n]))?((Дата:|Date:)([^\n]+[\n]))?((Тема:|Theme:)([^\n]+[\n]))?
-
-private static final String GROUP_SPLIT =
-            // Группа 1: [текст письма (без лишних переносов строк)]
-            "([^\\n]+[\\n])" +
-            // Группа 2: [from: <Имя отправителя> <адрес>]
-            // Группа 3: [from:]
-            // Группа 4: []
-            "((От:|От кого:|From:)([^\\n]+[\\n]))?" +
-            "((Кому:|To:)([^\\n]+[\\n]))?" +
-            "((Дата:|Date:)([^\\n]+[\\n]))?" +
-            "((Тема:|Theme:)([^\\n]+[\\n]))?";
-
-Pattern.compile(
-        // Группы 1-2 (-get: clients_list)
-        "^[\\-{1}](?!send)(?!scanIP)([a-z]+)\\s([a-z]+)|"
-        // Группы 3-4-5 (-send: client_name "message")
-        +"^[\\-{1}](send){1}\\s([a-z]+)\\s\\\"([\\S\\s]+)\\\"|"
-        // Группы 6-7-8 (-scanIP: IP_address_start:IP_address_end)
-        +"^[\\-{1}]([a-z]+)\\s([0-9.]{7,15})\\:([0-9.]{7,15})|"
-        // Группы 9-10-11 (-scanIP host_name port_number)
-        +"[\\-{1}](scanIP){1}\\s([a-z]+)\\s([0-9]{1,5})|"
-        // Группа 12 (help)
-        +"^(help)\\z");
- */

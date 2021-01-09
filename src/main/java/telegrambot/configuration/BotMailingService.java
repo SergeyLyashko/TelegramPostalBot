@@ -15,7 +15,7 @@ import java.util.Map;
 public class BotMailingService implements MailingService {
 
     private PostalBot postalBot;
-    private final Map<Integer, ChatLetter> mailBox;
+    private final Map<Integer, Letter> mailBox;
 
     @Override
     @Autowired
@@ -29,7 +29,7 @@ public class BotMailingService implements MailingService {
 
     @Override
     public void createMail(String[] from, String text) {
-        ChatLetter letter = new ChatLetter(from, text);
+        Letter letter = new Letter(from, text);
         Message headerMessage = postalBot.sendMessage(letter.getHeaderMessage());
         Integer letterId = headerMessage.getMessageId();
         mailBox.put(letterId, letter);
@@ -55,21 +55,21 @@ public class BotMailingService implements MailingService {
     }
 
     private void turnOffBodyMessage(Integer messageId) {
-        ChatLetter letter = mailBox.get(messageId);
+        Letter letter = mailBox.get(messageId);
         EditMessageText turnOffMessage = letter.getTurnOffMessage();
         turnOffMessage.setMessageId(messageId);
         postalBot.sendMessage(turnOffMessage);
     }
 
     private void deleteMessage(Integer messageId) {
-        ChatLetter letter = mailBox.get(messageId);
+        Letter letter = mailBox.get(messageId);
         DeleteMessage deleteMessage = letter.getDeleteMessage();
         deleteMessage.setMessageId(messageId);
         postalBot.deleteMessage(deleteMessage);
     }
 
     private void callbackBodyMessage(Integer messageId){
-        ChatLetter letter = mailBox.get(messageId);
+        Letter letter = mailBox.get(messageId);
         EditMessageText bodyMessage = letter.getBodyMessage();
         bodyMessage.setMessageId(messageId);
         postalBot.sendMessage(bodyMessage);
