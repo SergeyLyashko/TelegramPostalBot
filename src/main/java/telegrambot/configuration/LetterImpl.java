@@ -1,21 +1,22 @@
 package telegrambot.configuration;
 
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.springframework.stereotype.Component;
 
+@Component("letter")
 public class LetterImpl implements Letter {
 
-    private static final String HEADER_NEW_MAIL = "@ NEW:";
-    private static final String HEADER_READ_MAIL = "@ read:";
     private static final String HEADER_BUTTON_PREFIX = "@ from: ";
+    private static final String LETTER_NEW = "@ NEW:";
+    private static final String LETTER_READ = "@ read:";
+
     private final String address;
     private final String name;
-
-    private SendMessage headerMessage;
-    private EditMessageText bodyMessage;
-    private EditMessageText turnOffMessage;
     private StringBuilder bodyBuilder;
     private String splitLine;
+
+    private final KeyBoard headerKeyboard;
+    private final KeyBoard bodyKeyBoard;
+    private String bodyText;
 
     public LetterImpl(String[] from, String text) {
         if(from.length < 2){
@@ -25,22 +26,15 @@ public class LetterImpl implements Letter {
             this.name = from[0];
             this.address = from[1];
         }
-        createHeaderTextToBody();
-        createHeader(HEADER_BUTTON_PREFIX+name);
+        this.headerKeyboard = new LetterKeyBoard(HEADER_BUTTON_PREFIX+name);
+        this.bodyKeyBoard = new LetterKeyBoard("delete", "hide");
         createBody(text);
-        turnOff(HEADER_BUTTON_PREFIX+name);
     }
 
-    private void createHeaderTextToBody(){
+    private void createBody(String text) {
         createSplitLine();
-        this.bodyBuilder = new StringBuilder();
-        bodyBuilder.append(splitLine);
-        bodyBuilder.append("from: ");
-        bodyBuilder.append(name);
-        bodyBuilder.append("\n@: ");
-        bodyBuilder.append(address);
-        bodyBuilder.append("\n");
-        bodyBuilder.append(splitLine);
+        createHeaderTextToBody();
+        this.bodyText = bodyBuilder.append(text).toString();
     }
 
     private void createSplitLine(){
@@ -53,45 +47,39 @@ public class LetterImpl implements Letter {
         this.splitLine = splitLine.toString();
     }
 
-    private void createHeader(String headerText){
-        KeyBoard headerKeyboard = new LetterKeyBoard(headerText);
-        this.headerMessage = createSendMessage(headerKeyboard);
+    private void createHeaderTextToBody(){
+        this.bodyBuilder = new StringBuilder();
+        bodyBuilder.append(splitLine);
+        bodyBuilder.append("from: ");
+        bodyBuilder.append(name);
+        bodyBuilder.append("\n@: ");
+        bodyBuilder.append(address);
+        bodyBuilder.append("\n");
+        bodyBuilder.append(splitLine);
     }
 
-    private SendMessage createSendMessage(KeyBoard serviceKeyBoard) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setText(HEADER_NEW_MAIL);
-        sendMessage.setReplyMarkup(serviceKeyBoard.getInlineKeyboardMarkup());
-        return sendMessage;
+    @Override
+    public String getLetterNewText() {
+        return LETTER_NEW;
     }
 
-    private void createBody(String text) {
-        KeyBoard keyBoard = new LetterKeyBoard("delete", "turn off");
-        String textBody = bodyBuilder.append(text).toString();
-        this.bodyMessage = createEditMessage(textBody, keyBoard);
+    @Override
+    public String getBodyText() {
+        return bodyText;
     }
 
-    private EditMessageText createEditMessage(String text, KeyBoard serviceKeyBoard) {
-        EditMessageText editMessage = new EditMessageText();
-        editMessage.setText(text);
-        editMessage.setReplyMarkup(serviceKeyBoard.getInlineKeyboardMarkup());
-        return editMessage;
+    @Override
+    public KeyBoard getHeaderKeyboard() {
+        return headerKeyboard;
     }
 
-    private void turnOff(String headerText) {
-        KeyBoard turnOfKeyboard = new LetterKeyBoard(headerText);
-        this.turnOffMessage = createEditMessage(HEADER_READ_MAIL, turnOfKeyboard);
+    @Override
+    public KeyBoard getBodyKeyboard() {
+        return bodyKeyBoard;
     }
 
-    public SendMessage getHeaderMessage() {
-        return headerMessage;
-    }
-
-    public EditMessageText getBodyMessage(){
-        return bodyMessage;
-    }
-
-    public EditMessageText getTurnOffMessage() {
-        return turnOffMessage;
+    @Override
+    public String getLetterReadText() {
+        return LETTER_READ;
     }
 }

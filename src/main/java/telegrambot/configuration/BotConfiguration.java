@@ -12,8 +12,8 @@ import telegrambot.decoupled.*;
 public class BotConfiguration {
 
     @Bean
-    public MailingService mailing(){
-        return new BotMailingService();
+    public MailService mailing(){
+        return new BotMailService();
     }
 
     @Bean

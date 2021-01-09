@@ -28,7 +28,7 @@ public class LetterKeyBoard implements KeyBoard {
         for(String button : buttons){
             InlineKeyboardButton inlineButton = new InlineKeyboardButton(button);
             if(isHeader(button)){
-                inlineButton.setCallbackData("header");
+                inlineButton.setCallbackData("show");
             }else{
                 inlineButton.setCallbackData(button);
             }

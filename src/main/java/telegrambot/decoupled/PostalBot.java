@@ -4,7 +4,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import telegrambot.configuration.MailingService;
+import telegrambot.configuration.MailService;
 
 public interface PostalBot {
 
@@ -12,7 +12,7 @@ public interface PostalBot {
     void setStartCommand(Command command);
     void setHelpCommand(Command command);
 
-    void setMailing(MailingService mailingService);
+    void setMailing(MailService mailService);
 
     void registerBot();
 

@@ -29,7 +29,7 @@ public class PostalLongPollingBot extends TelegramLongPollingBot implements Post
     private Command startCommand; // TODO ???
     private Command helpCommand; // TODO ???
 
-    private MailingService mailingService;
+    private MailService mailService;
 
     @Override
     @Autowired
@@ -53,8 +53,8 @@ public class PostalLongPollingBot extends TelegramLongPollingBot implements Post
 
     @Override
     @Autowired
-    public void setMailing(MailingService mailingService){
-        this.mailingService = mailingService;
+    public void setMailing(MailService mailService){
+        this.mailService = mailService;
     }
 
     @Override
@@ -75,7 +75,8 @@ public class PostalLongPollingBot extends TelegramLongPollingBot implements Post
 
     @Override
     public void deliverMail(String[] from, String text) {
-        mailingService.createMail(from, text);
+        Letter letter = new LetterImpl(from, text);
+        mailService.handle(letter);
     }
 
     @Override
@@ -110,7 +111,7 @@ public class PostalLongPollingBot extends TelegramLongPollingBot implements Post
     public void onUpdateReceived(Update update) {
         if(update.hasCallbackQuery()){
             CallbackQuery callbackQuery = update.getCallbackQuery();
-            mailingService.executeCallback(callbackQuery);
+            mailService.executeCallback(callbackQuery);
         }
     }
 
