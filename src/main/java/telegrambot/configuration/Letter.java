@@ -11,4 +11,6 @@ public interface Letter {
     String getLetterNewText();
 
     String getLetterReadText();
+
+    void init(String[] from, String text);
 }

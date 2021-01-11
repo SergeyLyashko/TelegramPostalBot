@@ -9,5 +9,5 @@ public interface MailService {
 
     void executeCallback(CallbackQuery callback);
 
-    void handle(Letter letter);
+    void handle(String[] from, String text);
 }

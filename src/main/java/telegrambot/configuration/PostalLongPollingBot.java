@@ -75,8 +75,7 @@ public class PostalLongPollingBot extends TelegramLongPollingBot implements Post
 
     @Override
     public void deliverMail(String[] from, String text) {
-        Letter letter = new LetterImpl(from, text);
-        mailService.handle(letter);
+        mailService.handle(from, text);
     }
 
     @Override

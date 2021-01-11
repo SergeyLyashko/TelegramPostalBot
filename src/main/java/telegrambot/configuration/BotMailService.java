@@ -1,6 +1,9 @@
 package telegrambot.configuration;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
@@ -13,11 +16,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component("mailing")
-public class BotMailService implements MailService {
+public class BotMailService implements MailService, ApplicationContextAware {
 
     private PostalBot postalBot;
     private final Map<Integer, Letter> mailBox;
     private Long chatId = 528647782L; // TODO TEST
+    private ApplicationContext context;
 
     @Override
     @Autowired
@@ -30,7 +34,9 @@ public class BotMailService implements MailService {
     }
 
     @Override
-    public void handle(Letter letter) {
+    public void handle(String[] from, String text) {
+        Letter letter = context.getBean("letter", Letter.class);
+        letter.init(from, text);
         KeyBoard headerKeyboard = letter.getHeaderKeyboard();
         String letterNew = letter.getLetterNewText();
         Message sendingMessage = sendMessage(headerKeyboard, letterNew);
@@ -94,5 +100,10 @@ public class BotMailService implements MailService {
         deleteMessage.setMessageId(messageId);
         postalBot.deleteMessage(deleteMessage);
         mailBox.remove(messageId);
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.context = applicationContext;
     }
 }

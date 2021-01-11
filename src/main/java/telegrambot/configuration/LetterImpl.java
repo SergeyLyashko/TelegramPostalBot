@@ -1,24 +1,27 @@
 package telegrambot.configuration;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component("letter")
+@Scope("prototype")
 public class LetterImpl implements Letter {
 
     private static final String HEADER_BUTTON_PREFIX = "@ from: ";
     private static final String LETTER_NEW = "@ NEW:";
     private static final String LETTER_READ = "@ read:";
 
-    private final String address;
-    private final String name;
+    private String address;
+    private String name;
     private StringBuilder bodyBuilder;
     private String splitLine;
 
-    private final KeyBoard headerKeyboard;
-    private final KeyBoard bodyKeyBoard;
+    private KeyBoard headerKeyboard;
+    private KeyBoard bodyKeyBoard;
     private String bodyText;
 
-    public LetterImpl(String[] from, String text) {
+    @Override
+    public void init(String[] from, String text){
         if(from.length < 2){
             this.name = "none";
             this.address = from[0];
