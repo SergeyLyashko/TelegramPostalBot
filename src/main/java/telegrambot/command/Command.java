@@ -1,4 +1,4 @@
-package telegrambot.decoupled;
+package telegrambot.command;
 
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
 

@@ -79,13 +79,14 @@ public class MailReceiverImpl implements MailReceiver {
         FlagTerm flagUnseen = new FlagTerm(seen,  false);
         try {
             Message[] messages = folder.search(flagUnseen);
-            Arrays.stream(messages).forEach(this::mailParser);
+            Arrays.stream(messages).forEach(this::deliver);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
     }
 
-    private void mailParser(Message message){
+    // Delivery mail to bot
+    private void deliver(Message message){
         mailParser.parseMessage(message);
         String[] from = mailParser.getFrom();
         String mailText = mailParser.getMailText();

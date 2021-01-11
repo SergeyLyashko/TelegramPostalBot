@@ -1,4 +1,4 @@
-package telegrambot.configuration;
+package telegrambot.decoupled;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,9 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import telegrambot.decoupled.BotToken;
-import telegrambot.decoupled.Command;
-import telegrambot.decoupled.PostalBot;
+import telegrambot.command.Command;
 
 /**
  * Бот

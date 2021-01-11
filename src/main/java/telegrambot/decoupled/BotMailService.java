@@ -1,4 +1,4 @@
-package telegrambot.configuration;
+package telegrambot.decoupled;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,6 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import telegrambot.decoupled.PostalBot;
 
 import java.util.HashMap;
 import java.util.Map;

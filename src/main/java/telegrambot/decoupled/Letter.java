@@ -1,4 +1,4 @@
-package telegrambot.configuration;
+package telegrambot.decoupled;
 
 public interface Letter {
 

@@ -1,7 +1,6 @@
-package telegrambot.configuration;
+package telegrambot.decoupled;
 
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import telegrambot.decoupled.PostalBot;
 
 public interface MailService {
 

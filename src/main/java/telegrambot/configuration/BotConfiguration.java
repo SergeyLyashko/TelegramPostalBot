@@ -3,12 +3,13 @@ package telegrambot.configuration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import telegrambot.command.Command;
 import telegrambot.command.HelpCommand;
 import telegrambot.command.StartCommand;
 import telegrambot.decoupled.*;
 
 @ImportResource(locations = {"classpath:bot-token-context.xml"})
-@ComponentScan(basePackages = {"telegrambot.configuration", "telegrambot.command"})
+@ComponentScan(basePackages = {"telegrambot.decoupled", "telegrambot.command"})
 @Configuration
 public class BotConfiguration {
 

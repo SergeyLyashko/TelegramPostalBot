@@ -7,7 +7,6 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import telegrambot.decoupled.Command;
 
 @Component("startCommand")
 public class StartCommand extends BotCommand implements Command {

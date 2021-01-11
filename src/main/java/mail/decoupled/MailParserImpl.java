@@ -50,10 +50,8 @@ public class MailParserImpl implements MailParser {
     private String decodeAddress(Address[] addresses){
         for(Address address: addresses){
             if(address != null){
-                System.out.println("addr: "+address.toString());// TODO TEST
                 try {
                     String decodeText = MimeUtility.decodeText(address.toString());
-                    System.out.println("test decode: "+decodeText);// TODO TEST
                     return decodeText;
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
@@ -72,8 +70,7 @@ public class MailParserImpl implements MailParser {
             from[0] = name;
             String address = matcher.group(2);
             from[1] = address;
-            System.out.println("test name: " + name);// TODO TEST
-            System.out.println("test addr: " + address);// TODO TEST
+            //System.out.println("test name: " + name+" addr: " + address);// TODO TEST
         }
         return from;
     }
@@ -83,7 +80,7 @@ public class MailParserImpl implements MailParser {
         for(int index=0; index<content.getCount(); index++){
             BodyPart bodyPart = content.getBodyPart(index);
             String contentType = bodyPart.getContentType();
-            System.out.println("num: "+index+" content: "+contentType);// TODO test
+            //System.out.println("num: "+index+" content: "+contentType);// TODO test
             if(contentType.equals(TEXT)){
                 return (String) bodyPart.getContent();
             }
@@ -98,7 +95,7 @@ public class MailParserImpl implements MailParser {
         while (matcher.find()){
             text.append(matcher.group(1));
         }
-        System.out.println(text.toString()); // TODO TEST
+        //System.out.println(text.toString()); // TODO TEST
         return text.toString();
     }
 }
