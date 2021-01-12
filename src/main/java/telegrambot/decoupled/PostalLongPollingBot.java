@@ -20,18 +20,19 @@ import telegrambot.command.Command;
  * задать описание бота
  * https://ru.stackoverflow.com/questions/668818/%D0%9A%D0%B0%D0%BA-%D0%B7%D0%B0%D0%B4%D0%B0%D1%82%D1%8C-%D0%BE%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5-%D0%B1%D0%BE%D1%82%D0%B0-telegram
  */
+
 @Component("postalBot")
 public class PostalLongPollingBot extends TelegramLongPollingBot implements PostalBot {
 
-    private BotToken botToken;
+    private final String botName;
+    private final String botToken;
     private Command startCommand; // TODO ???
     private Command helpCommand; // TODO ???
 
     private MailService mailService;
 
-    @Override
-    @Autowired
-    public void setPostalBotToken(BotToken botToken) {
+    public PostalLongPollingBot(String botName, String botToken){
+        this.botName = botName;
         this.botToken = botToken;
     }
 
@@ -115,11 +116,11 @@ public class PostalLongPollingBot extends TelegramLongPollingBot implements Post
 
     @Override
     public String getBotUsername() {
-        return botToken.getBotName();
+        return botName;
     }
 
     @Override
     public String getBotToken() {
-        return botToken.getBotToken();
+        return botToken;
     }
 }

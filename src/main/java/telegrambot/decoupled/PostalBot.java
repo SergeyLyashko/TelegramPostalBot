@@ -8,7 +8,6 @@ import telegrambot.command.Command;
 
 public interface PostalBot {
 
-    void setPostalBotToken(BotToken botToken);
     void setStartCommand(Command command);
     void setHelpCommand(Command command);
 

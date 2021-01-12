@@ -25,10 +25,6 @@ public class BotConfiguration {
         return new HelpCommand();
     }
 
-    public PostalBot postalBot(){
-        return new PostalLongPollingBot();
-    }
-
     public Letter letter(){
         return new LetterImpl();
     }

@@ -1,5 +1,6 @@
 package telegrambot.decoupled;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -13,6 +14,7 @@ public class BodyKeyboard implements Keyboard {
     private final InlineKeyboardMarkup inlineKeyboard;
     private final List<InlineKeyboardButton> keyboardList;
 
+    @Autowired
     public BodyKeyboard(String delButton, String hideButton){
         inlineKeyboard = new InlineKeyboardMarkup();
         keyboardList = new ArrayList<>();
