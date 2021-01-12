@@ -10,9 +10,9 @@ public interface Letter {
 
     String getBody();
 
-    String getLetterNewText();
+    String getStatusNew();
 
-    String getLetterReadText();
+    String getStatusRead();
 
     void init(String[] from, String text);
 }

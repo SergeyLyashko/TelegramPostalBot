@@ -31,6 +31,7 @@ public class PostalLongPollingBot extends TelegramLongPollingBot implements Post
 
     private MailService mailService;
 
+    @Autowired
     public PostalLongPollingBot(String botName, String botToken){
         this.botName = botName;
         this.botToken = botToken;
@@ -52,7 +53,7 @@ public class PostalLongPollingBot extends TelegramLongPollingBot implements Post
 
     @Override
     @Autowired
-    public void setMailing(MailService mailService){
+    public void setMailService(MailService mailService){
         this.mailService = mailService;
     }
 
@@ -61,7 +62,7 @@ public class PostalLongPollingBot extends TelegramLongPollingBot implements Post
         try {
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
             telegramBotsApi.registerBot(this);
-            registerCommand();
+            //registerCommand();
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

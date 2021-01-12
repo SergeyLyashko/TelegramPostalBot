@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 public class LetterImpl implements Letter {
 
     private static final String HEADER_BUTTON_PREFIX = "@ from: ";
-    private static final String LETTER_NEW = "@ NEW:";
-    private static final String LETTER_READ = "@ read:";
+    private static final String STATUS_NEW = "--- @ NEW ---";
+    private static final String STATUS_READ = "@ read";
 
     private String address;
     private String name;
@@ -59,8 +59,8 @@ public class LetterImpl implements Letter {
     }
 
     @Override
-    public String getLetterNewText() {
-        return LETTER_NEW;
+    public String getStatusNew() {
+        return STATUS_NEW;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class LetterImpl implements Letter {
     }
 
     @Override
-    public String getLetterReadText() {
-        return LETTER_READ;
+    public String getStatusRead() {
+        return STATUS_READ;
     }
 }

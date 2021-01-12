@@ -11,7 +11,7 @@ public interface PostalBot {
     void setStartCommand(Command command);
     void setHelpCommand(Command command);
 
-    void setMailing(MailService mailService);
+    void setMailService(MailService mailService);
 
     void registerBot();
 

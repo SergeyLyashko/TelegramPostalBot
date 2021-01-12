@@ -17,10 +17,11 @@ import java.util.Map;
 @Component("mailing")
 public class BotMailService implements MailService, ApplicationContextAware {
 
-    private PostalBot postalBot;
-    private final Map<Integer, Letter> mailBox;
     private Long chatId = 528647782L; // TODO TEST
+
+    private final Map<Integer, Letter> mailBox;
     private ApplicationContext context;
+    private PostalBot postalBot;
     private Keyboard bodyKeyboard;
 
     @Override
@@ -45,7 +46,7 @@ public class BotMailService implements MailService, ApplicationContextAware {
         letter.init(from, text);
         Keyboard headerKeyboard = context.getBean("headerKeyboard", Keyboard.class);
         headerKeyboard.addButtonName(letter.getHeader());
-        String letterNew = letter.getLetterNewText();
+        String letterNew = letter.getStatusNew();
         Message sendingMessage = sendMessage(headerKeyboard, letterNew);
         Integer letterId = sendingMessage.getMessageId();
         mailBox.put(letterId, letter);
@@ -82,7 +83,7 @@ public class BotMailService implements MailService, ApplicationContextAware {
         Letter letter = mailBox.get(messageId);
         Keyboard headerKeyboard = context.getBean("headerKeyboard", Keyboard.class);
         headerKeyboard.addButtonName(letter.getHeader());
-        String readText = letter.getLetterReadText();
+        String readText = letter.getStatusRead();
         sendEditMessage(messageId, headerKeyboard, readText);
     }
 
