@@ -13,14 +13,9 @@ public class LetterImpl implements Letter {
 
     private String address;
     private String name;
-    private StringBuilder bodyBuilder;
     private String splitLine;
-
-    //private Keyboard headerKeyboard;
-    //private Keyboard bodyKeyboard;
     private String body;
     private String header;
-
 
     @Override
     public void init(String[] from, String text){
@@ -32,15 +27,13 @@ public class LetterImpl implements Letter {
             this.address = from[1];
         }
         this.header = HEADER_BUTTON_PREFIX+name;
-        //this.headerKeyboard = new HeaderKeyboard(HEADER_BUTTON_PREFIX+name);
-        //this.bodyKeyboard = new HeaderKeyboard("delete", "hide");
         createBody(text);
     }
 
     private void createBody(String text) {
         createSplitLine();
-        createHeaderTextToBody();
-        this.body = bodyBuilder.append(text).toString();
+        StringBuilder builder = buildTextBody();
+        this.body = builder.append(text).toString();
     }
 
     private void createSplitLine(){
@@ -53,8 +46,8 @@ public class LetterImpl implements Letter {
         this.splitLine = splitLine.toString();
     }
 
-    private void createHeaderTextToBody(){
-        this.bodyBuilder = new StringBuilder();
+    private StringBuilder buildTextBody(){
+        StringBuilder bodyBuilder = new StringBuilder();
         bodyBuilder.append(splitLine);
         bodyBuilder.append("from: ");
         bodyBuilder.append(name);
@@ -62,6 +55,7 @@ public class LetterImpl implements Letter {
         bodyBuilder.append(address);
         bodyBuilder.append("\n");
         bodyBuilder.append(splitLine);
+        return bodyBuilder;
     }
 
     @Override
@@ -78,16 +72,6 @@ public class LetterImpl implements Letter {
     public String getHeader(){
         return header;
     }
-    /*
-    @Override
-    public Keyboard getHeaderKeyboard() {
-        return headerKeyboard;
-    }*/
-    /*
-    @Override
-    public Keyboard getBodyKeyboard() {
-        return bodyKeyboard;
-    }*/
 
     @Override
     public String getLetterReadText() {

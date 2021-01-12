@@ -21,19 +21,19 @@ public class BotMailService implements MailService, ApplicationContextAware {
     private final Map<Integer, Letter> mailBox;
     private Long chatId = 528647782L; // TODO TEST
     private ApplicationContext context;
-    //private Keyboard bodyKeyboard;
+    private Keyboard bodyKeyboard;
 
     @Override
     @Autowired
     public void setPostalBot(PostalBot postalBot){
         this.postalBot = postalBot;
     }
-    /*
+
     @Override
     @Autowired
     public void setBodyKeyboard(Keyboard bodyKeyboard){
         this.bodyKeyboard = bodyKeyboard;
-    }*/
+    }
 
     public BotMailService(){
         mailBox = new HashMap<>();
@@ -43,7 +43,6 @@ public class BotMailService implements MailService, ApplicationContextAware {
     public void handle(String[] from, String text) {
         Letter letter = context.getBean("letter", Letter.class);
         letter.init(from, text);
-        //Keyboard headerKeyboard = letter.getHeaderKeyboard();
         Keyboard headerKeyboard = context.getBean("headerKeyboard", Keyboard.class);
         headerKeyboard.addButtonName(letter.getHeader());
         String letterNew = letter.getLetterNewText();
@@ -81,7 +80,6 @@ public class BotMailService implements MailService, ApplicationContextAware {
 
     private void hideMessage(Integer messageId) {
         Letter letter = mailBox.get(messageId);
-        //Keyboard headerKeyboard = letter.getHeaderKeyboard();
         Keyboard headerKeyboard = context.getBean("headerKeyboard", Keyboard.class);
         headerKeyboard.addButtonName(letter.getHeader());
         String readText = letter.getLetterReadText();
@@ -90,12 +88,8 @@ public class BotMailService implements MailService, ApplicationContextAware {
 
     private void showMessage(Integer messageId){
         Letter letter = mailBox.get(messageId);
-        //Keyboard bodyKeyboard = letter.getBodyKeyboard();
-        Keyboard bodyKeyboard = context.getBean("bodyKeyboard", Keyboard.class);
         String bodyText = letter.getBody();
-        bodyKeyboard.addButtonName("delete");
-        bodyKeyboard.addButtonName("hide");
-        sendEditMessage(messageId, bodyKeyboard, bodyText);
+        sendEditMessage(messageId, this.bodyKeyboard, bodyText);
     }
 
     private void sendEditMessage(Integer messageId, Keyboard newKeyboard, String newText){

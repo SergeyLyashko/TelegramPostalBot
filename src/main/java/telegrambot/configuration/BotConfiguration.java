@@ -8,7 +8,7 @@ import telegrambot.command.HelpCommand;
 import telegrambot.command.StartCommand;
 import telegrambot.decoupled.*;
 
-@ImportResource(locations = {"classpath:bot-token-context.xml"})
+@ImportResource(locations = {"classpath:bot-token-context.xml", "classpath:body-keyboard-context.xml"})
 @ComponentScan(basePackages = {"telegrambot.decoupled", "telegrambot.command"})
 @Configuration
 public class BotConfiguration {
@@ -35,9 +35,5 @@ public class BotConfiguration {
 
     public Keyboard headerKeyboard(){
         return new HeaderKeyboard();
-    }
-
-    public Keyboard bodyKeyboard(){
-        return new BodyKeyboard();
     }
 }

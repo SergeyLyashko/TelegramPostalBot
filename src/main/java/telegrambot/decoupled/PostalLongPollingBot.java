@@ -66,6 +66,7 @@ public class PostalLongPollingBot extends TelegramLongPollingBot implements Post
         }
     }
 
+    // TODO register commands
     private void registerCommand() {
         //super.register(startCommand.getBotCommand());
         //super.register(helpCommand.getBotCommand());
