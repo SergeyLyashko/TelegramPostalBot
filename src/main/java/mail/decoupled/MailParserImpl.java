@@ -35,6 +35,19 @@ public class MailParserImpl implements MailParser {
         return null;
     }
 
+    private String defineStringContent(Multipart content) throws MessagingException, IOException {
+        // TODO варианты получения текстового сообщения или в виде MIME
+        for(int index=0; index<content.getCount(); index++){
+            BodyPart bodyPart = content.getBodyPart(index);
+            String contentType = bodyPart.getContentType();
+            System.out.println("num: "+index+" content: "+contentType);// TODO test
+            if(contentType.equals(TEXT)){
+                return (String) bodyPart.getContent();
+            }
+        }
+        return null;
+    }
+
     @Override
     public String[] getFrom(){
         try {
@@ -51,8 +64,7 @@ public class MailParserImpl implements MailParser {
         for(Address address: addresses){
             if(address != null){
                 try {
-                    String decodeText = MimeUtility.decodeText(address.toString());
-                    return decodeText;
+                    return MimeUtility.decodeText(address.toString());
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -61,6 +73,9 @@ public class MailParserImpl implements MailParser {
         return null;
     }
 
+    /*
+     *  Mail from string splitter on name & address
+     */
     private String[] addressParser(String decodeAddress) {
         Pattern compile = Pattern.compile(ADDRESS_SPLIT_REGEX);
         Matcher matcher = compile.matcher(decodeAddress);
@@ -70,22 +85,8 @@ public class MailParserImpl implements MailParser {
             from[0] = name;
             String address = matcher.group(2);
             from[1] = address;
-            //System.out.println("test name: " + name+" addr: " + address);// TODO TEST
         }
         return from;
-    }
-
-    private String defineStringContent(Multipart content) throws MessagingException, IOException {
-        // TODO варианты получения текстового сообщения или в виде MIME
-        for(int index=0; index<content.getCount(); index++){
-            BodyPart bodyPart = content.getBodyPart(index);
-            String contentType = bodyPart.getContentType();
-            //System.out.println("num: "+index+" content: "+contentType);// TODO test
-            if(contentType.equals(TEXT)){
-                return (String) bodyPart.getContent();
-            }
-        }
-        return null;
     }
 
     private String textParser(String content) {

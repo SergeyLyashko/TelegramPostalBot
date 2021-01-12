@@ -1,6 +1,5 @@
-package mail.configuration;
+package mail.decoupled;
 
-import mail.decoupled.MailAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,12 +16,12 @@ import javax.mail.PasswordAuthentication;
  * Этот метод подкласса может делать запросы аутентификации.
  */
 @Component("authenticator")
-public class NgsMailAuthenticator extends Authenticator implements MailAuthenticator {
+public class MailAuthenticatorImpl extends Authenticator implements MailAuthenticator {
     private final String login;
     private final String pass;
 
     @Autowired
-    public NgsMailAuthenticator(String login, String pass){
+    public MailAuthenticatorImpl(String login, String pass){
         this.login = login;
         this.pass = pass;
     }

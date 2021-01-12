@@ -1,31 +1,27 @@
 package mail.configuration;
 
 import mail.decoupled.*;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
-@ImportResource(locations = {"classpath:ngs-mail-token-context.xml",
-        "classpath:ngs-imap-context.xml"})
+@ImportResource(locations = {"classpath:ngs-mail-token-context.xml", "classpath:ngs-imap-context.xml"})
+@ComponentScan(basePackages = {"mail.decoupled"})
 @Configuration
-public class NgsMailConfiguration {
+public class MailConfiguration {
 
-    @Bean
     public MailParser parser(){
         return new MailParserImpl();
     }
 
-    @Bean
     public MailReceiver mailReceiver(){
         return new MailReceiverImpl();
     }
 
-    @Bean
     public MailConnection connection(){
         return new MailStoreConnection();
     }
 
-    @Bean
     public MailProperties properties(){
         return new MailPropertiesImpl();
     }

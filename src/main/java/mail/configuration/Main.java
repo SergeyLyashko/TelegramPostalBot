@@ -12,7 +12,7 @@ https://javaee.github.io/javamail/docs/api/
 public class Main {
     public static void main(String...args){
 
-        ApplicationContext context = new AnnotationConfigApplicationContext(NgsMailConfiguration.class);
+        ApplicationContext context = new AnnotationConfigApplicationContext(MailConfiguration.class);
         MailReceiver receiver = context.getBean("mailReceiver", MailReceiver.class);
         receiver.receiveMail();
     }

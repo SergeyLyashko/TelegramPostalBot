@@ -20,7 +20,7 @@ import java.util.Arrays;
 @Service("mailReceiver")
 public class MailReceiverImpl implements MailReceiver {
 
-    private String folderName = "INBOX";
+    private static final String INBOX = "INBOX";
     private MailConnection mailConnection;
     private MailParser mailParser;
     private PostalBot postalBot;
@@ -64,7 +64,7 @@ public class MailReceiverImpl implements MailReceiver {
      */
     private Folder getFolder(Store store) {
         try {
-            Folder folder = store.getFolder(folderName);
+            Folder folder = store.getFolder(INBOX);
             folder.open(Folder.READ_WRITE);
             return folder;
         } catch (MessagingException e) {

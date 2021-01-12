@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component("imapsettings")
-public class ImapSettings implements PostalSettings {
+public class ImapPostalSettings implements PostalSettings {
 
     private final String imapServer;
     private final String imapPort;
 
     @Autowired
-    public ImapSettings(String imapServer, String imapPort){
+    public ImapPostalSettings(String imapServer, String imapPort){
         this.imapServer = imapServer;
         this.imapPort = imapPort;
     }

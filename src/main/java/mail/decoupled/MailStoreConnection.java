@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import javax.mail.*;
 import java.util.Properties;
 
-
 @Service("connection")
 public class MailStoreConnection implements MailConnection {
 

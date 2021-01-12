@@ -11,6 +11,7 @@ import java.util.Properties;
 @Service("properties")
 public class MailPropertiesImpl implements MailProperties {
 
+    private final Properties properties;
     private PostalSettings postalSettings;
 
     @Override
@@ -19,10 +20,13 @@ public class MailPropertiesImpl implements MailProperties {
         this.postalSettings = postalSettings;
     }
 
+    public MailPropertiesImpl(){
+        this.properties = new Properties();
+    }
+
     @Override
     public Properties createNewProperties() {
         String imapPort = postalSettings.getPort();
-        Properties properties = new Properties();
         properties.put("mail.debug", "false");
         properties.put("mail.store.protocol", "imaps");
         properties.put("mail.imap.ssl.enable", "true");
