@@ -32,4 +32,12 @@ public class BotConfiguration {
     public Letter letter(){
         return new LetterImpl();
     }
+
+    public Keyboard headerKeyboard(){
+        return new HeaderKeyboard();
+    }
+
+    public Keyboard bodyKeyboard(){
+        return new BodyKeyboard();
+    }
 }

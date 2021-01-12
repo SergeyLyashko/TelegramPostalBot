@@ -21,12 +21,19 @@ public class BotMailService implements MailService, ApplicationContextAware {
     private final Map<Integer, Letter> mailBox;
     private Long chatId = 528647782L; // TODO TEST
     private ApplicationContext context;
+    //private Keyboard bodyKeyboard;
 
     @Override
     @Autowired
     public void setPostalBot(PostalBot postalBot){
         this.postalBot = postalBot;
     }
+    /*
+    @Override
+    @Autowired
+    public void setBodyKeyboard(Keyboard bodyKeyboard){
+        this.bodyKeyboard = bodyKeyboard;
+    }*/
 
     public BotMailService(){
         mailBox = new HashMap<>();
@@ -36,14 +43,16 @@ public class BotMailService implements MailService, ApplicationContextAware {
     public void handle(String[] from, String text) {
         Letter letter = context.getBean("letter", Letter.class);
         letter.init(from, text);
-        KeyBoard headerKeyboard = letter.getHeaderKeyboard();
+        //Keyboard headerKeyboard = letter.getHeaderKeyboard();
+        Keyboard headerKeyboard = context.getBean("headerKeyboard", Keyboard.class);
+        headerKeyboard.addButtonName(letter.getHeader());
         String letterNew = letter.getLetterNewText();
         Message sendingMessage = sendMessage(headerKeyboard, letterNew);
         Integer letterId = sendingMessage.getMessageId();
         mailBox.put(letterId, letter);
     }
 
-    private Message sendMessage(KeyBoard keyBoard, String text){
+    private Message sendMessage(Keyboard keyBoard, String text){
         SendMessage sendHeader = new SendMessage();
         sendHeader.setChatId(chatId.toString());
         sendHeader.setText(text);
@@ -72,19 +81,24 @@ public class BotMailService implements MailService, ApplicationContextAware {
 
     private void hideMessage(Integer messageId) {
         Letter letter = mailBox.get(messageId);
-        KeyBoard headerKeyboard = letter.getHeaderKeyboard();
+        //Keyboard headerKeyboard = letter.getHeaderKeyboard();
+        Keyboard headerKeyboard = context.getBean("headerKeyboard", Keyboard.class);
+        headerKeyboard.addButtonName(letter.getHeader());
         String readText = letter.getLetterReadText();
         sendEditMessage(messageId, headerKeyboard, readText);
     }
 
     private void showMessage(Integer messageId){
         Letter letter = mailBox.get(messageId);
-        KeyBoard bodyKeyboard = letter.getBodyKeyboard();
-        String bodyText = letter.getBodyText();
+        //Keyboard bodyKeyboard = letter.getBodyKeyboard();
+        Keyboard bodyKeyboard = context.getBean("bodyKeyboard", Keyboard.class);
+        String bodyText = letter.getBody();
+        bodyKeyboard.addButtonName("delete");
+        bodyKeyboard.addButtonName("hide");
         sendEditMessage(messageId, bodyKeyboard, bodyText);
     }
 
-    private void sendEditMessage(Integer messageId, KeyBoard newKeyboard, String newText){
+    private void sendEditMessage(Integer messageId, Keyboard newKeyboard, String newText){
         EditMessageText message = new EditMessageText();
         message.setChatId(chatId.toString());
         message.setMessageId(messageId);

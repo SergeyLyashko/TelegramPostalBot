@@ -16,9 +16,11 @@ public class LetterImpl implements Letter {
     private StringBuilder bodyBuilder;
     private String splitLine;
 
-    private KeyBoard headerKeyboard;
-    private KeyBoard bodyKeyBoard;
-    private String bodyText;
+    //private Keyboard headerKeyboard;
+    //private Keyboard bodyKeyboard;
+    private String body;
+    private String header;
+
 
     @Override
     public void init(String[] from, String text){
@@ -29,15 +31,16 @@ public class LetterImpl implements Letter {
             this.name = from[0];
             this.address = from[1];
         }
-        this.headerKeyboard = new LetterKeyBoard(HEADER_BUTTON_PREFIX+name);
-        this.bodyKeyBoard = new LetterKeyBoard("delete", "hide");
+        this.header = HEADER_BUTTON_PREFIX+name;
+        //this.headerKeyboard = new HeaderKeyboard(HEADER_BUTTON_PREFIX+name);
+        //this.bodyKeyboard = new HeaderKeyboard("delete", "hide");
         createBody(text);
     }
 
     private void createBody(String text) {
         createSplitLine();
         createHeaderTextToBody();
-        this.bodyText = bodyBuilder.append(text).toString();
+        this.body = bodyBuilder.append(text).toString();
     }
 
     private void createSplitLine(){
@@ -67,19 +70,24 @@ public class LetterImpl implements Letter {
     }
 
     @Override
-    public String getBodyText() {
-        return bodyText;
+    public String getBody() {
+        return body;
     }
 
     @Override
-    public KeyBoard getHeaderKeyboard() {
+    public String getHeader(){
+        return header;
+    }
+    /*
+    @Override
+    public Keyboard getHeaderKeyboard() {
         return headerKeyboard;
-    }
-
+    }*/
+    /*
     @Override
-    public KeyBoard getBodyKeyboard() {
-        return bodyKeyBoard;
-    }
+    public Keyboard getBodyKeyboard() {
+        return bodyKeyboard;
+    }*/
 
     @Override
     public String getLetterReadText() {

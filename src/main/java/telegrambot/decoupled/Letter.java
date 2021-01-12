@@ -2,11 +2,13 @@ package telegrambot.decoupled;
 
 public interface Letter {
 
-    KeyBoard getHeaderKeyboard();
+    //Keyboard getHeaderKeyboard();
 
-    KeyBoard getBodyKeyboard();
+    //Keyboard getBodyKeyboard();
 
-    String  getBodyText();
+    String getHeader();
+
+    String getBody();
 
     String getLetterNewText();
 
